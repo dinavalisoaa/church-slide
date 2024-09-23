@@ -1,0 +1,23 @@
+// Navigate to a specific slide
+Reveal.slide(indexh, indexv, indexf);
+
+// Relative navigation
+Reveal.left();
+Reveal.right();
+Reveal.up();
+Reveal.down();
+Reveal.prev();
+Reveal.next();
+
+// Fragment navigation
+Reveal.navigateFragment(indexf); // (-1 means all fragments are invisible)
+Reveal.prevFragment();
+Reveal.nextFragment();
+
+// Checks which directions we can navigate towards
+// {top: false, right: true, bottom: false, left: false}
+Reveal.availableRoutes();
+
+// Checks which fragment directions we can navigate towards
+// {prev: false, next: true}
+Reveal.availableFragments();
