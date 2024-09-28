@@ -1078,7 +1078,7 @@ function Sections() {
     }
   };
 
-  const [theme, setTheme] = useState("league");
+  const [theme, setTheme] = useState("sky");
   const [presState, setPresState] = useState({
     indexh: -1,
     indexv: -1,
@@ -1166,7 +1166,7 @@ function Sections() {
         scrollSnap="mandatory"
         minScale={1}
         maxScale={1}
-        transition="fade"
+        transition="zoom"
         width={"100%"}
         margin={0.01}
         controlsLayout={controlsLayout}
@@ -1185,13 +1185,14 @@ function Sections() {
         // margin={0.01}
         // transition="slide"
       >
-        <Hira hira={"ffpm_" + "1"} key={1} title={"FFPM " + "1"} />
-        <TransitionPage title="Fanekem-pinoana" />
+        <Hira hira={"ffpm_" + "1"} key={1} andininy={"1,3,4 "} title={"FFPM " + "1"} />
+        <TransitionPage title="Asa sy fampaherezana"  description="Avelao ny zaza anatona ahy fa azy ny fanjakan'ny lanitra,
+         II Kor 12:1-3" image="/ressources/images/feo.jpg" />
         <Hira hira={"ffpm_" + "325"} key={325} title={"FFPM " + "325"} />
         <TransitionPage title="FITIAVANA" />
-        <Hira hira={"ffpm_" + "342"} key={342} title={"FFPM " + "342"} />
+        <Hira hira={"ffpm_" + "342"} key={342}  title={"FFPM " + "342"} />
 
-        <Hira hira={"ffpm_" + "124"} key={124} title={"FFPM " + "124"} />
+        <Hira hira={"ffpm_" + "124"} andininy={"3,4,5"} key={124} title={"FFPM " + "124"} />
         <Hira hira={"ffpm_" + "90"} key={90} title={"FFPM " + "90"} />
       </RevealSlides>
     </>
