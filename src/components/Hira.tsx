@@ -54,11 +54,11 @@ function Hira(props) {
     <>
       <section key={props.key}>
         <section key={1}>
-          <div style={{ fontSize: 100 }}>{props.title}</div>
+          <div style={{ fontSize: 80 }}>{props.title}</div>
         </section>
         {data.map((hira, index) =>
           data[index] ? (
-            <section
+            <section style={{"textWrap":"pretty"}}
               key={(index + 1).toString() + "-1"}
               style={{ display: "None" }}
               hidden={false}
