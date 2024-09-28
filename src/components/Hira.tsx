@@ -1,4 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { RevealHandle, RevealSlides } from "../Reveal";
 import { BiLogoGithub } from "react-icons/bi";
@@ -15,39 +24,53 @@ import "../App.css";
 import Reveal from "../reveal.js";
 import Andininy from "./Andininy";
 
-function Hira(props) {
+function Hira(props: {
+  andininy: string;
+  hira: string;
+  key: number;
+  title: string | null;
+}) {
   const [data, setData] = useState([]);
-  const deckDivRef = useRef<HTMLDivElement>(null); // reference to deck container div
-  const deckRef = useRef<Reveal.Api | null>(null); // reference to deck reveal instance
+  const [includeAnd, setIncludeAnd] = useState([]);
+  const isPresent = (and_index: number) => {
+    let cpt=0;
+    if (includeAnd.length > 0) {
+      includeAnd.map((value) => {
+        
+        if (value!=undefined && (and_index) == parseInt(value)) {
+          console.log(
+            "True.....",
+            includeAnd,
+            ".....<<<<.....>>>>..",
+            "and_index<=>",and_index,"..",parseInt(value)
+          );
+          cpt++;
+        }
+      });
+      if(cpt>0){
+        return true;
+
+      }
+      return false;
+    }
+    if (includeAnd.length == 0) {
+      return true;
+    }
+    console.log("False.....", includeAnd, ".....<<<<.....>>>>..",    "and_index<=>",and_index);
+
+    return false;
+  };
   useEffect(() => {
+    const data = props.andininy;
+    if (data != undefined) {
+      setIncludeAnd(data.split(","));
+    }
     fetch("/ressources/hira/01_fihirana_ffpm.json")
       .then((response) => response.json())
       .then((jsonData) => {
         setData(jsonData.fihirana[props.hira].hira);
       })
       .catch((error) => console.error("Error fetching the JSON data:", error));
-    // Prevents double initialization in stric  t mode
-    // if (deckRef.current) return;
-
-    // deckRef.current = new Reveal(deckDivRef.current!, {
-    //   transition: "slide",
-    //   // other config options
-    // });
-
-    // deckRef.current.initialize().then(() => {
-    //   // good place for event handlers and plugin setups
-    // });
-
-    // return () => {
-    //   try {
-    //     if (deckRef.current) {
-    //       deckRef.current.destroy();
-    //       deckRef.current = null;
-    //     }
-    //   } catch (e) {
-    //     console.warn("Reveal.js destroy call failed.");
-    //   }
-    // };
   }, []);
 
   return (
@@ -56,21 +79,21 @@ function Hira(props) {
         <section key={1}>
           <div style={{ fontSize: 80 }}>{props.title}</div>
         </section>
-        {data.map((hira, index) =>
-          data[index] ? (
-            <section style={{"textWrap":"pretty"}}
-              key={(index + 1).toString() + "-1"}
-              style={{ display: "None" }}
-              hidden={false}
-            >
-              <div style={{ fontSize: 60 }}>
-                <p>{hira.andininy}.</p>
-                <Andininy data={hira.tononkira} and={hira.andininy} />{" "}
-              </div>
-            </section>
-          ) : (
-            <p>Chargement...</p>
-          )
+        {data.map(
+          (hira, index) =>
+            isPresent(hira.andininy) && (
+              <section
+                style={{ textWrap: "pretty" }}
+                key={(index + 1).toString() + "-1"}
+                style={{ display: "None" }}
+                hidden={false}
+              >
+                <div style={{ fontSize: 60 }}>
+                  <p>{hira.andininy}</p>
+                  <Andininy data={hira.tononkira} and={hira.andininy} />{" "}
+                </div>
+              </section>
+            )
         )}
       </section>
     </>
