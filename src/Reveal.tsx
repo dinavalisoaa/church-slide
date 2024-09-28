@@ -423,7 +423,7 @@ export const RevealSlides = forwardRef<RevealHandle, RevealSlidesProps>(({ theme
 
     // Initialize reveal.js
     useEffect(() => {
-        if (revealRef.current) return;
+        // if (revealRef.current) return;
         const configuration = setupConfig(configProps);
         revealRef.current = new Reveal(revealDivRef.current!, configuration);
         revealRef.current.initialize().then(() => {
@@ -433,50 +433,50 @@ export const RevealSlides = forwardRef<RevealHandle, RevealSlidesProps>(({ theme
             // does not work
             // To Do: make sure the highlight plugin only changes the HTML involving the code once instead of many times.
             // Possible solution is to make a change to the plugin init function.
-            const highlighter = revealRef.current!.getPlugin("highlight");
-            if (highlighter) {
-                highlighter.init && highlighter.init(revealRef.current!);
-            }
+            // const highlighter = revealRef.current!.getPlugin("highlight");
+            // if (highlighter) {
+            //     highlighter.init && highlighter.init(revealRef.current!);
+            // }
 
             // Add state change handling
-            if (onStateChange) {
-                // Send slide position indecies back to Streamlit on initialization and on slide change
-                onStateChange(revealRef.current!.getState());
+            // if (onStateChange) {
+            //     // Send slide position indecies back to Streamlit on initialization and on slide change
+            //     onStateChange(revealRef.current!.getState());
 
-                revealRef.current!.on("slidechanged", () => {
-                    onStateChange(revealRef.current!.getState());
-                });
-                revealRef.current!.on("fragmentshown", () => {
-                    // event.fragment = the fragment DOM element
-                    console.log("fragment shown");
-                    onStateChange(revealRef.current!.getState());
-                });
-                revealRef.current!.on("fragmenthidden", () => {
-                    // event.fragment = the fragment DOM element
-                    onStateChange(revealRef.current!.getState());
-                });
-                revealRef.current!.on("overviewshown", () => {
-                    // event.overview = the overview DOM element
-                    onStateChange(revealRef.current!.getState());
-                });
-                revealRef.current!.on("overviewhidden", () => {
-                    // event.overview = the overview DOM element
-                    onStateChange(revealRef.current!.getState());
-                });
-                revealRef.current!.on("paused", () => {
-                    // event.fragment = the fragment DOM element
-                    onStateChange(revealRef.current!.getState());
-                });
-                revealRef.current!.on("resumed", () => {
-                    // event.fragment = the fragment DOM element
-                    onStateChange(revealRef.current!.getState());
-                });
-            }
+            //     revealRef.current!.on("slidechanged", () => {
+            //         onStateChange(revealRef.current!.getState());
+            //     });
+            //     revealRef.current!.on("fragmentshown", () => {
+            //         // event.fragment = the fragment DOM element
+            //         console.log("fragment shown");
+            //         onStateChange(revealRef.current!.getState());
+            //     });
+            //     revealRef.current!.on("fragmenthidden", () => {
+            //         // event.fragment = the fragment DOM element
+            //         onStateChange(revealRef.current!.getState());
+            //     });
+            //     revealRef.current!.on("overviewshown", () => {
+            //         // event.overview = the overview DOM element
+            //         onStateChange(revealRef.current!.getState());
+            //     });
+            //     revealRef.current!.on("overviewhidden", () => {
+            //         // event.overview = the overview DOM element
+            //         onStateChange(revealRef.current!.getState());
+            //     });
+            //     revealRef.current!.on("paused", () => {
+            //         // event.fragment = the fragment DOM element
+            //         onStateChange(revealRef.current!.getState());
+            //     });
+            //     revealRef.current!.on("resumed", () => {
+            //         // event.fragment = the fragment DOM element
+            //         onStateChange(revealRef.current!.getState());
+            //     });
+            // }
 
-            const presState = JSON.parse(presStateStr);
-            if (Object.keys(presState).length !== 0) {
-                revealRef.current!.setState(presState);
-            }
+            // const presState = JSON.parse(presStateStr);
+            // if (Object.keys(presState).length !== 0) {
+            //     revealRef.current!.setState(presState);
+            // }
 
             console.log("Reveal initialized");
         });
@@ -516,46 +516,46 @@ export const RevealSlides = forwardRef<RevealHandle, RevealSlidesProps>(({ theme
     useEffect(() => {
         if (revealRef.current?.isReady()) {
             revealRef.current.configure(configProps);
-            revealRef.current.layout();
+            // revealRef.current.layout();
         }
-    }, [configProps]);
+    }, []);
 
     // When reveal.js is ready (after initialization or reconfiguration),
     // set the initial state if it is passed in from Streamlit.
     useEffect(() => {
-        const presState = JSON.parse(presStateStr);
-        if (revealRef.current?.isReady() && Object.keys(presState).length !== 0) {
-            revealRef.current.setState(presState);
-        }
+        // const presState = JSON.parse(presStateStr);
+        // if (revealRef.current?.isReady() && Object.keys(presState).length !== 0) {
+        //     revealRef.current.setState(presState);
+        // }
     }, [presStateStr]);
 
     // Disable reveal.js if disable is true
     useEffect(() => {
-        if (revealRef.current?.isReady()) {
-            if (disable) {
-                revealRef.current.togglePause(true);
-                const viewport = revealRef.current.getViewportElement();
-                if (viewport) {
-                    viewport.style.pointerEvents = "none";
-                }
-            } else {
-                revealRef.current.togglePause(false);
-                const viewport = revealRef.current.getViewportElement();
-                if (viewport) {
-                    viewport.style.pointerEvents = "auto";
-                }
-            }
-        }
+        // if (revealRef.current?.isReady()) {
+        //     if (disable) {
+        //         revealRef.current.togglePause(true);
+        //         const viewport = revealRef.current.getViewportElement();
+        //         if (viewport) {
+        //             viewport.style.pointerEvents = "none";
+        //         }
+        //     } else {
+        //         revealRef.current.togglePause(false);
+        //         const viewport = revealRef.current.getViewportElement();
+        //         if (viewport) {
+        //             viewport.style.pointerEvents = "auto";
+        //         }
+        //     }
+        // }
     }, [disable]);
 
     // When the children change, sync slides and adjust the layout
     useEffect(() => {
-        console.log("children adjust");
-        const children = JSON.parse(childrenStr);
-        if (revealRef.current?.isReady() && children) {
-            revealRef.current.sync();
-            revealRef.current.layout();
-        }
+        // console.log("children adjust");
+        // const children = JSON.parse(childrenStr);
+        // if (revealRef.current?.isReady() && children) {
+        //     revealRef.current.sync();
+        //     revealRef.current.layout();
+        // }
     }, [childrenStr]);
 
     // Adjust layout after every render.
@@ -563,10 +563,10 @@ export const RevealSlides = forwardRef<RevealHandle, RevealSlidesProps>(({ theme
     // including changes in the parent, configuration options,
     // container size, and changes in the child elements.
     useLayoutEffect(() => {
-        console.log("layout adjust");
-        if (revealRef.current?.isReady()) {
-            revealRef.current.layout();
-        }
+        // console.log("layout adjust");
+        // if (revealRef.current?.isReady()) {
+        //     revealRef.current.layout();
+        // }
     });
 
     return (
