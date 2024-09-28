@@ -123,36 +123,52 @@ function TransitionPage(props) {
   return (
     <>
       <section key={props.key}>
-        <section key={1} style={{ backgroundImage: props.image }}>
+        <section key={1} style={{ backgroundImage: props.image }} data-background-color="#dedede">
           {/* <div style={{ fontSize: 100 }}>{props.title}</div> */}
           <div
             style={{
-              width: "75%",
+              width: "88%",
               height: "100%",
-              display: "inline-flex",
+              display: "flex",
+              flexDirection:"row",
               marginTop: "2.5rem",
               justifyContent: "flex-end",
               grid: "inherit",
+              
             }}
           >
             <div
               style={{
                 height: "100%",
-                padding: "2rem",
                 flexDirection: "column",
+                padding:"50px"
               }}
             >
-              <p style={{ textAlign: "left" }}>
+              <p style={{ textAlign: "center" }} 
+             >
                 <span
                   style={{
                     marginLeft: "0.35rem",
                     marginRight: "0.35rem",
-                    fontSize: 60,
+                    fontSize: 60,overflowWrap:"anywhere",
                   }}
                 >
-                  Fotoana ny ankizy sy tanora
+                 {props.title}
                 </span>
               </p>
+
+              <p style={{ textAlign: "center" ,color:"red" }}>
+                  <span
+                    className="fragment slide-in-then-semi-out"
+                    style={{ marginLeft: "0.35rem", marginRight: "0.35rem" ,overflowWrap:"anywhere"}}>
+                   {props.description}
+                  </span>
+                  <span
+                    className="fragment fade-in-then-semi-out"
+                    style={{ marginLeft: "0.35rem", marginRight: "0.35rem" }}
+                  >
+                  </span>
+                </p>
             </div>
             <div
               style={{
@@ -167,15 +183,15 @@ function TransitionPage(props) {
               }}
             >
               <img
-                src="/ressources/images/fiangonana.jpg"
+                src={props.image}
                 width={600}
                 height={600}
               />
             </div>
           </div>
         </section>
-        <section></section>
-        <section></section>
+
+   
       </section>
     </>
   );
