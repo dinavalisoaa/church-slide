@@ -33,30 +33,23 @@ function Hira(props: {
   const [data, setData] = useState([]);
   const [includeAnd, setIncludeAnd] = useState([]);
   const isPresent = (and_index: number) => {
-    let cpt=0;
+    let cpt = 0;
     if (includeAnd.length > 0) {
       includeAnd.map((value) => {
-        
-        if (value!=undefined && (and_index) == parseInt(value)) {
-          console.log(
-            "True.....",
-            includeAnd,
-            ".....<<<<.....>>>>..",
-            "and_index<=>",and_index,"..",parseInt(value)
-          );
+        if (value != undefined && and_index == parseInt(value)) {
+         
           cpt++;
         }
       });
-      if(cpt>0){
+      if (cpt > 0) {
         return true;
-
       }
       return false;
     }
     if (includeAnd.length == 0) {
       return true;
     }
-    console.log("False.....", includeAnd, ".....<<<<.....>>>>..",    "and_index<=>",and_index);
+  
 
     return false;
   };
@@ -68,11 +61,37 @@ function Hira(props: {
     fetch("/ressources/hira/01_fihirana_ffpm.json")
       .then((response) => response.json())
       .then((jsonData) => {
-        setData(jsonData.fihirana[props.hira].hira);
+        let data_hira = jsonData.fihirana[props.hira].hira;
+        setData(clusterAndininy(data_hira));
       })
       .catch((error) => console.error("Error fetching the JSON data:", error));
   }, []);
+  const decom = (arr) => {
+    const res = [];
+    for (let i = 0; i < arr.length; i += 4) {
+      res.push(arr.slice(i, i + 4));
+    }
+    return res;
+  };
 
+  const clusterAndininy = (data_hira) => {
+    let data_vaovao = [];
+    data_hira.map((data, index_i) => {
+      let tononkira = data.tononkira;
+      let tononkira_feno = tononkira.split("\n");
+      let alinea = tononkira.split("\n").length - 1;
+      let decomp = decom(tononkira_feno);
+      decomp.map((value, index_j) => {
+        data_vaovao.push({
+          andininy: data.andininy,
+          // order: index_i + index_j,
+          tononkira: value,
+          fiverenany: false,
+        });
+      });
+    });
+    return data_vaovao;
+  };
   return (
     <>
       <section key={props.key}>
@@ -88,7 +107,7 @@ function Hira(props: {
                 style={{ display: "None" }}
                 hidden={false}
               >
-                <div style={{ fontSize: 60 }}>
+                <div style={{ fontSize: 100 }}>
                   <p>{hira.andininy}</p>
                   <Andininy data={hira.tononkira} and={hira.andininy} />{" "}
                 </div>
