@@ -8,11 +8,10 @@ import "../App.css";
 function Andininy(props) {
   const data = props.data;
   const and = props.and;
-  const data_plot = data.split("\n");
-  const return_values = data_plot.map((element, index) => {
+  // const data_plot = data.split("\n");
+  const return_values = data.map((element, index) => {
     return <p>{element}</p>;
   });
-  console.log(return_values);
   return return_values;
 }
 export default Andininy;
