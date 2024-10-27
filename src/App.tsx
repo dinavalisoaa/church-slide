@@ -4,13 +4,14 @@ import Song from "./components/base/Song";
 
 
 import "./App.css";
-import OriginalPage from "./components/OriginalPage";
+// import OriginalPage from "./components/base/";
 import Slide from "./components/base/Slide";
+import SlideForm from "./components/base/SlideForm";
+import DemoPageContent from "./components/base/DemoPageContent";
 
 // import './custom_theme_starter.css';
 
 
-const showIntro = false;
 
 /*
 const Presentation = () => {
@@ -89,13 +90,15 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Slide />} />
+        <Route path="/irery" element={<DemoPageContent/>}/>
+        <Route path="/base" element={<Slide />} />
+        <Route path="/" element={<SlideForm />} />
         <Route
           path="/simple"
-          element={<Song hira="ffpm_635" key="1" title="FFPM 635" />}
+          element={<Song hira="ffpm_635" key="1" title="FFPM 635" andininy={null}  />}
         />
         {/* <Route path="/" element={<Home />} /> */}
-        <Route path="/original" element={<OriginalPage />} />
+        {/* <Route path="/original" element={<OriginalPage />} /> */}
       </Routes>
     </Router>
   );
