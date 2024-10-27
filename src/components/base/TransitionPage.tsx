@@ -1,8 +1,6 @@
 import {
   useEffect,
-  useState,
 } from "react";
-import HoverEffect from "hover-effect";
 // import { CSSProperties, forwardRef, useImperativeHandle, useMemo, useRef, useState } from "react"
 
 // import RevealMarkdown from 'reveal.js/plugin/markdown/markdown';
@@ -12,31 +10,15 @@ import HoverEffect from "hover-effect";
 
 import "../../App.css";
 
-interface LiquidImageOptions {
-  displacementImage: string;
-  image1: string;
-  image2: string;
-  imagesRatio?: number;
-  intensity?: number;
-  intensity1?: number;
-  intensity2?: number;
-  angle?: number;
-  angle1?: number;
-  angle2?: number;
-  speedIn?: number;
-  speedOut?: number;
-  hover?: boolean;
-  easing?: string;
-  video?: boolean;
-}
 
-
-
-function TransitionPage(props) {
-  const [data, setData] = useState([]);
+function TransitionPage(
+  props: { 
+    key: string|number; 
+    image: string | undefined; 
+    title: string,
+    description: string }) {
   useEffect(() => {}, []);
 
-  const [liquidInit, setLiquidInit] = useState(false);
 
   return (
     <>

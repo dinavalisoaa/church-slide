@@ -2,6 +2,7 @@
 
 import {
     CSSProperties,
+    forwardRef,
     useEffect,
     useImperativeHandle,
     useMemo,
@@ -10,7 +11,6 @@ import {
   } from "react";
   import { Link } from "react-router-dom";
   import { RevealHandle, RevealSlides } from "../Reveal";
-  import { invoke } from "@tauri-apps/api/core";
   
   // const { invoke } = window.__TAURI__.tauri;
   // import RevealMarkdown from 'reveal.js/plugin/markdown/markdown';
@@ -248,15 +248,14 @@ interface HoverEffectHandle {
     );
   };
 function Home() {
-    const [greetMsg, setGreetMsg] = useState("");
-    const [name, setName] = useState("");
+    const [greetMsg] = useState("");
     const revealRef = useRef<RevealHandle>(null);
     invoke("greet", { name: "World" }).then((response) =>
       console.log("................>greet", response)
     );
   
-    const [theme, setTheme] = useState("black");
-    const [presState, setPresState] = useState({
+    const [theme] = useState("black");
+    const [presState] = useState({
       indexh: -1,
       indexv: -1,
       indexf: -1,
@@ -274,8 +273,7 @@ function Home() {
     const liquidImageRef2 = useRef<HoverEffectHandle>(null);
     const [liquidInit, setLiquidInit] = useState(false);
   
-    const timeDelta = 1000;
-    const prevSlide = (indexh, indexv) => {
+    const prevSlide = (indexh: number | undefined, indexv: number | undefined) => {
       if (revealRef.current?.getReveal()?.isFirstSlide() === false) {
         revealRef.current?.getReveal()?.slide(indexh, indexv);
         console.log("Clicked");
@@ -312,45 +310,16 @@ function Home() {
     // const themes = [ "black", "white", "league", "beige", "sky", "night", "serif", "simple", "solarized", "blood", "moon", "night", "none"];
   
     useEffect(() => {
-      if (!showIntro) return;
-      const timer = setTimeout(() => {
-        setTheme("league");
-      }, 3 * timeDelta);
+    //   if (!showIntro) return;
+    //   const timer = setTimeout(() => {
+    //     setTheme("league");
+    //   }, 3 * timeDelta);
   
       // const timer2 = setTimeout(() => {
       //   setFirstSlideText("Explore new possibilities thanks to the React framework and ecosystem")
       // }, 6*timeDelta);
   
-      const timer2a = setTimeout(() => {
-        setPresState({
-          indexh: 0,
-          indexv: 1,
-          indexf: 0,
-          paused: false,
-          overview: false,
-        });
-      }, 9 * timeDelta);
-  
-      const timer2b = setTimeout(() => {
-        setPresState({
-          indexh: 0,
-          indexv: 1,
-          indexf: 1,
-          paused: false,
-          overview: false,
-        });
-      }, 12 * timeDelta);
-  
-      const timer2c = setTimeout(() => {
-        setPresState({
-          indexh: 0,
-          indexv: 1,
-          indexf: 2,
-          paused: false,
-          overview: false,
-        });
-      }, 15 * timeDelta);
-  
+    
       // const timer3 = setTimeout(() => {
       //   setTheme("white")
       // }, 9*timeDelta);
@@ -368,10 +337,10 @@ function Home() {
       // }, 18*timeDelta);
   
       return () => {
-        clearTimeout(timer);
-        clearTimeout(timer2a);
-        clearTimeout(timer2b);
-        clearTimeout(timer2c);
+        // clearTimeout(timer);
+        // clearTimeout(timer2a);
+        // clearTimeout(timer2b);
+        // clearTimeout(timer2c);
         // clearTimeout(timer3)
         // clearTimeout(timer4)
         // clearTimeout(timer5)

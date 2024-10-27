@@ -250,15 +250,6 @@ const showIntro = false;
 
 function OriginalPage() {
   const revealRef = useRef<RevealHandle>(null);
-  const goToSlide = (indexh: number, indexv: number) => {
-    console.log("<<<<<<<<<<<<<<Hello>>>>>>>>>>>>>>");
-    console.log("<<<<<<<<<<,,,,>>>>>>>>>>", revealRef);
-
-    if (revealRef.current) {
-      revealRef.current.getReveal()?.slide(indexh, indexv, 0);
-      console.log("->>>>>>>>>>>>." + revealRef.current.getReveal());
-    }
-  };
   const [theme, setTheme] = useState("black");
   const [presState, setPresState] = useState({
     indexh: -1,
@@ -279,11 +270,9 @@ function OriginalPage() {
   const [liquidInit, setLiquidInit] = useState(false);
 
   const timeDelta = 1000;
-  const next = () => {
-    console.log(Reveal.slide(3, 0, 0));
-  };
+  
 
-  const prevSlide = (indexh, indexv) => {
+  const prevSlide = (indexh: number | undefined, indexv: number | undefined) => {
     if (revealRef.current?.getReveal()?.isFirstSlide() === false) {
       revealRef.current?.getReveal()?.slide(indexh, indexv);
       console.log("Clicked");
@@ -984,13 +973,13 @@ function OriginalPage() {
     </>
   );
 }
-
+/*
 const Presentation = () => {
   // Fonction pour aller directement à une section spécifique
   // const goToSlide = (horizontalIndex, verticalIndex) => {
   //   Reveal.slide(horizontalIndex, verticalIndex);
   // };
-  const goToSlide = (horizontalIndex, verticalIndex) => {
+  const goToSlide = (horizontalIndex: number | undefined, verticalIndex: number | undefined) => {
     if (Reveal.isReady()) {
       Reveal.slide(horizontalIndex, verticalIndex);
     }
@@ -1055,9 +1044,11 @@ const Presentation = () => {
     </RevealSlides>
   );
 };
+*/
 
 // export default Presentation;
 // export default App;
+/*
 function Simple() {
   const deckDivRef = useRef<HTMLDivElement>(null); // reference to deck container div
   const deckRef = useRef<Reveal.Api | null>(null); // reference to deck reveal instance
@@ -1119,6 +1110,6 @@ function Simple() {
       </div>
     </div>
   );
-}
+}*/
 
 export default OriginalPage;
