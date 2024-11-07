@@ -1,0 +1,60 @@
+/* Sidebar styles */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #444;
+}
+
+.sidebar-avatar-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.sidebar-avatar-small {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.sidebar-toggle {
+  color: white;
+}
+
+.sidebar-icon {
+  color: white;
+}
+
+/* Hover effects */
+.MuiListItem-root:hover {
+  background-color: #555;
+  cursor: pointer;
+}
+
+.MuiCollapse-root {
+  padding-left: 16px;
+}
+
+.MuiListItemText-root {
+  color: white;
+}
+
+.MuiListItemText-primary {
+  font-size: 14px;
+}
+
+/* Sidebar.css */
+.MuiDrawer-paper {
+  height: 100vh; /* Fixe la hauteur à 100% de la fenêtre */
+  overflow-y: auto; /* Permet le défilement vertical si nécessaire */
+  overflow-x: hidden; /* Empêche le défilement horizontal */
+}
