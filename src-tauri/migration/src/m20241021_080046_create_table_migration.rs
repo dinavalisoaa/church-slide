@@ -9,38 +9,91 @@ impl MigrationTrait for Migration {
         manager
         .create_table(
             Table::create()
-                .table(Post::Table)
+                .table(Types::Table)
                 .if_not_exists()
-                .col(pk_auto(Post::Id))  
-                .col(string(Post::Title))
-                .col(string(Post::Text)) 
-                .col(float(Post::Amount).default(0.0))
-                .col(float(Post::Verification).default(0.0))
+                .col(pk_auto(Types::Id))  
+                .col(string(Types::Name))
                 .to_owned(),
         )
         .await;
-         // Créer la table 'Comment'
+      
+
+      
+        manager
+        .create_table(
+            Table::create()
+                .table(Author::Table)
+                .if_not_exists()
+                .col(pk_auto(Author::Id))  
+                .col(string(Author::Name))
+                .to_owned(),
+        )
+        .await;
+
          manager
-         .create_table(
-             Table::create()
-                 .table(Comment::Table)
-                 .if_not_exists()
-                 .col(pk_auto(Comment::Id))  
-                 .col(string(Comment::Content))
-                 .col(integer(Comment::PostId))
-                 .foreign_key(
-                     ForeignKeyCreateStatement::new()
-                         .name("comment_post_fk_id")
-                         .from_tbl(Comment::Table)
-                         .from_col(Comment::PostId)
-                         .to_tbl(Post::Table)
-                         .to_col(Post::Id)
-                         .on_delete(ForeignKeyAction::Cascade),
-                 ) 
-                 .to_owned(),
-         )
-         .await
-       
+        .create_table(
+            Table::create()
+                .table(Category::Table)
+                .if_not_exists()
+                .col(pk_auto(Category::Id))  
+                .col(string(Category::Name))
+                .to_owned(),
+        )
+        .await;
+            // Create Song table
+            manager
+            .create_table(
+                Table::create()
+                    .table(Song::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Song::Id))  
+                    .col(string(Song::Title))
+                    .col(integer(Song::CategoryId))
+                    .foreign_key(
+                        ForeignKeyCreateStatement::new()
+                            .name("song_category_id_fk_id")
+                            .from_tbl(Song::Table)
+                            .from_col(Song::CategoryId)
+                            .to_tbl(Category::Table)
+                            .to_col(Category::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )  
+                    .col(integer(Song::AuthorId))
+                    .foreign_key(
+                        ForeignKeyCreateStatement::new()
+                            .name("song_author_id_fk_id")
+                            .from_tbl(Song::Table)
+                            .from_col(Song::AuthorId)
+                            .to_tbl(Author::Table)
+                            .to_col(Author::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    ) 
+                    .col(string(Song::Verses))
+                    .to_owned(),
+            )    .await;
+        
+            // Create Song table
+            manager
+            .create_table(
+                Table::create()
+                    .table(Verses::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Verses::Id))  
+                    .col(string(Verses::Number))
+                    .col(boolean(Verses::Returns))
+                    .col(integer(Verses::SongId))
+                    .foreign_key(
+                        ForeignKeyCreateStatement::new()
+                            .name("verses_song_id_fk_id")
+                            .from_tbl(Verses::Table)
+                            .from_col(Verses::SongId)
+                            .to_tbl(Song::Table)
+                            .to_col(Song::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )  
+                    .to_owned(),
+            )
+            .await
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
@@ -50,6 +103,7 @@ impl MigrationTrait for Migration {
             .await
     }
 }
+
 
 #[derive(Iden)]
 enum Post {
@@ -62,10 +116,45 @@ enum Post {
 }
 
 #[derive(Iden)]
-enum Comment {
+enum Category {
     Table,
     Id,
-    PostId,  
-    Content,
-    CreatedAt
+    Name
+}
+
+#[derive(Iden)]
+enum Types {
+    Table,
+    Id,
+    Name
+}
+
+#[derive(Iden)]
+enum Author {
+    Table,
+    Id,
+    Name
+}
+
+
+#[derive(Iden)]
+enum Song {
+    Table,
+    Id, 
+    Title,
+    CategoryId,
+    AuthorId,
+    Number,
+    Verses
+}
+
+
+#[derive(Iden)]
+enum Verses {
+    Table,
+    Id,
+    SongId,  
+    Text,
+    Number,
+    Returns
 }
