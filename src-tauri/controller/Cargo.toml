@@ -1,13 +1,21 @@
 [package]
-name = "service"
+name = "controller"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+
+[lib]
+name = "controller"
+path = "src/lib.rs"
+
 [dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tauri = { version = "1.5", features = ["shell-open"] }
+service = { path = "../service" }
 entity = { path = "../entity" }
-repository = { path = "../repository" }
 
 [dependencies.sea-orm]
 version = "1.0.1"
