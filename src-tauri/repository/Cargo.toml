@@ -1,0 +1,32 @@
+[package]
+name = "repository"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+
+
+[lib]
+name = "repository"
+path = "src/lib.rs"
+
+[dependencies]
+entity = { path = "../entity" }
+
+[dependencies.sea-orm]
+version = "1.0.1"
+features = [ "sqlx-sqlite", "runtime-tokio-rustls", "macros" ]
+default-features = false
+
+
+[dev-dependencies]
+tokio = { version = "1.20.0", features = ["macros", "rt"] }
+
+[features]
+mock = ["sea-orm/mock"]
+
+[[test]]
+name = "mock"
+required-features = ["mock"]
