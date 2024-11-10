@@ -16,11 +16,12 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(belongs_to = "super::category::Entity", from = "Column::category_id", to = "super::category::Column::Id")]
+    #[sea_orm(belongs_to = "super::category::Entity", from = "Column::CategoryId", to = "super::category::Column::Id")]
     Category, 
-    #[sea_orm(belongs_to = "super::author::Entity", from = "Column::author_id", to = "super::author::Column::Id")]
+    #[sea_orm(belongs_to = "super::author::Entity", from = "Column::AuthorId", to = "super::author::Column::Id")]
     Author,
 }
+
 
 impl Related<super::category::Entity> for Entity {
     fn to() -> RelationDef {

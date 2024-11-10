@@ -16,6 +16,7 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(belongs_to = "super::post::Entity", from = "Column::PostId", to = "super::post::Column::Id")]
     Post, 
+    
 }
 
 impl Related<super::post::Entity> for Entity {
