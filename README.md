@@ -1,6 +1,6 @@
 
-# Program presentation for the church during worship
-## Lyrics,  Liturgy
+#  Program presentation for the church during worship
+## Lyrics,  Liturgy, Holy song
 
 ![preview](https://raw.githubusercontent.com/dinavalisoaa/church-slide/refs/heads/tauri-integration/examples/1.png)
 
@@ -10,6 +10,7 @@
 ## Contents
 - [Features](#features)
 - [Prerequisites](#prerequisites)
+- [Pre-existing](#prerequisites)
 - [Installation](#installation)
 - [Configuration](#configuration)
 <!-- - [Commands](#commands) -->
@@ -30,34 +31,6 @@
 
 <img src="https://static.slid.es/reveal/logo-v1/reveal-white-text.svg" width="90" alt="React Icons">
 
-## Overview
-- Displaying FFPM's Lyrics in real time
-- Displaying entire programs
-  - Psalm worship
-  - Transition page
-  - Liturgy:
-    - 1,2,3,4 
-  - Generate track(features)
-  - Pericop program
-  - Holy scripture
-  - Faith agreement:
-    - 1,2,3,4, Filipian 
-  - Song lyrics:
-    - FFPM
-    - Fihirana fanampiny
-    - Antema
-    - Tsanta
-    - Fihirana fifohazana
-    - Fihirana vovoko manga
-    - Psalm songs
-    - Extra songs
-
-## Analysis of existing situation
-- Powerpoint use
-- Need to create a slide for each use 
-- Long loading
-- Not generic
-- Repetive process
 <!-- ![GraphQL](https://img.shields.io/badge/GraphQL-%23646CFF.svg?style=for-the-badge&logo=GraphQL&logoColor=pink) -->
 
 ## Features
@@ -82,6 +55,16 @@ It currently provides the following features:
 - Cargo 1.82.0  
 - Node (v18.18.1.)
 - sea-orm-cli (v1.1.0)
+
+
+
+## Pre-existing
+
+- Using Powerpoint
+- Need to create a slide for each use 
+- Time-consuming to load
+- Not reusable
+
 
 ## Installation
 
