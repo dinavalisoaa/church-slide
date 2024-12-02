@@ -68,9 +68,6 @@ It currently provides the following features:
 
 ## Installation
 
-
-Using [lazy.nvim](https://github.com/folke/lazy.nvim):
-
 ```cmd
 npm install 
 ```
