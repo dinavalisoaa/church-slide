@@ -1,8 +1,3 @@
-@ -1,42 +1,146 @@
-## Slide presentation of FJKM AGF program
-#  Reveal JS + Vite + React
-<img src="https://vitejs.dev/logo.svg" width="50" alt="React Icons"> 
-<img src="https://react.dev/images/brand/logo_dark.svg" width="50" alt="React Icons">
 
 # Lyrics and program presentation in church cult
 
