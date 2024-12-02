@@ -1,5 +1,6 @@
 
-# Lyrics and program presentation in church cult
+# Program presentation for the church during worship
+## Lyrics,  Liturgy
 
 ![preview](https://raw.githubusercontent.com/dinavalisoaa/church-slide/refs/heads/tauri-integration/examples/1.png)
 
