@@ -1,9 +1,13 @@
 // mod mutation;
 // mod query;
 pub mod types;
+pub mod category;
 
 // pub use mutation::*;
 // pub use query::*;
 pub use types::*;
+pub use category::*;
 
-pub use sea_orm;
+pub mod dbconnection; 
+
+pub use dbconnection::DbConnection;
