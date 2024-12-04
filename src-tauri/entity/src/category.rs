@@ -7,13 +7,23 @@ pub struct Model {
     #[sea_orm(primary_key)]
     #[serde(skip_deserializing)]
     pub id: i32,
-    pub name: String,  // Foreign key to the Post model
+    pub name: String,  
+    pub type_id: i32,
+    // #[sea_orm(ignore)]
+    // pub types: Vec<types::Model>
    }
+
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
- 
+    #[sea_orm(belongs_to = "super::types::Entity", from = "Column::TypeId", to = "super::types::Column::Id")]
+    Types
 }
-
+   
+   impl Related<super::types::Entity> for Entity {
+       fn to() -> RelationDef {
+           Relation::Types.def()
+       }
+   }
 
 impl ActiveModelBehavior for ActiveModel {}
