@@ -1,14 +1,18 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use ::entity::{types, types::Entity as Types};
+use ::entity::{category, category::Entity as Category};
 use entity::post;
 use migration::sea_orm::EntityTrait;
 use migration::{Migrator, MigratorTrait};
 use serde::{Deserialize, Serialize};
-use service::sea_orm::{Database, DatabaseConnection};
-use service::TypesService;
+use sea_orm::{Database, DatabaseConnection};
+// use service::TypesService;
+// use service::CategoryService;
 use std::env;
 use std::fs;
+/* 
+
 #[tokio::main]
 async fn main() {
     env::set_var("RUST_LOG", "debug");
@@ -33,6 +37,7 @@ async fn main() {
         .await
         .expect("Database connection failed");
     Migrator::up(&conn, None).await.unwrap();
+    let state = AppState { conn };
 
     // let posts = QueryCore::find_all(&conn)
     //     .await
@@ -57,11 +62,62 @@ async fn main() {
         .invoke_handler(tauri::generate_handler![
             save_types,
             retrieve_types,
-            retrieve_type_by_id 
+            retrieve_type_by_id ,
+            update_types,
+            delete_types,
+            retrieve_category_song,
+            save_category_song
             ])
 
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+*/
+
+#[tokio::main]
+async fn main() {
+    tauri::async_runtime::spawn(async {
+        graphql::create_graphql_server().await.unwrap();
+    });
+
+    tauri::Builder::default()
+        .run(tauri::generate_context!())
+        .expect("error while running Tauri application");
+}
+
+/* 
+
+#[tauri::command]
+async fn delete_types(
+    state: tauri::State<'_, AppState>,
+   id:i32
+) -> Result<FlashData, ()> {
+    let _ = &state.conn;
+    println!("{}<<<<",id);
+    TypesService::delete_by_id(&state.conn,id) .await
+    .expect("could not delete ");  
+    let data = FlashData {
+        kind: "success".to_owned(),
+        message: "Save succcessfully added".to_owned(),
+    };
+    Ok(data)
+}
+#[tauri::command]
+async fn update_types(
+    state: tauri::State<'_, AppState>,
+    id:i32,
+    form: types::Model,
+) -> Result<FlashData, ()> {
+    let _ = &state.conn;
+    TypesService::update_by_id(&state.conn,id, form)
+        .await
+        .expect("could not update ");
+
+    let data = FlashData {
+        kind: "success".to_owned(),
+        message: "Save succcessfully added".to_owned(),
+    };
+    Ok(data)
 }
 
 #[tauri::command]
@@ -106,6 +162,38 @@ async fn retrieve_type_by_id(
         Ok(data)
 }
 
+
+#[tauri::command]
+async fn retrieve_category_song(
+    state: tauri::State<'_, AppState>,
+) -> Result<Vec<category::Model>, ()> {
+    let _ = &state.conn;
+    
+    let data=CategoryService::find_all(&state.conn)
+        .await
+        .expect("could not fetch category song");
+    Ok(data)
+}
+
+
+
+
+#[tauri::command]
+async fn save_category_song(
+    state: tauri::State<'_, AppState>,
+    form: category::Model,
+) -> Result<FlashData, ()> {
+    let _ = &state.conn;
+    CategoryService::save(&state.conn, form)
+        .await
+        .expect("could not insert Category Song");
+
+    let data = FlashData {
+        kind: "success".to_owned(),
+        message: "Save succcessfully added".to_owned(),
+    };
+    Ok(data)
+}
 
 /*
 #[tauri::command]
@@ -201,3 +289,5 @@ struct Params {
     page: Option<u64>,
     posts_per_page: Option<u64>,
 }
+
+*/
