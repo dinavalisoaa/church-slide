@@ -1,6 +1,7 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
+use crate::types;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "category")]
 pub struct Model {
@@ -9,8 +10,8 @@ pub struct Model {
     pub id: i32,
     pub name: String,  
     pub type_id: i32,
-    // #[sea_orm(ignore)]
-    // pub types: Vec<types::Model>
+    #[sea_orm(ignore)]
+    pub types: Option<types::Model>
    }
 
 
