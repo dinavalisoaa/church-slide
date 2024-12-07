@@ -73,8 +73,8 @@ npm install
 ```
 
 ```cmd
-cd scr-tauri
-cargo install 
+cd src-tauri
+cargo install --path . 
 ```
 For database migration`db.sqlite` 
 
