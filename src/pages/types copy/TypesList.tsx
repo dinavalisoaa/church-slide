@@ -38,7 +38,6 @@ const TypesList: React.FC =  () => {
   const [openForm, setOpenForm] = useState(false);
 
   const handleOpenForm = () => setOpenForm(true);
-  const [searchTerm, setSearchTerm] = useState("");
 
   const { handleSubmit } = useForm<FormData>({
     defaultValues: {
@@ -54,6 +53,7 @@ const TypesList: React.FC =  () => {
       file: null,
     },
   });
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [listTypes, setListTypes] = useState<TypeSong[]>([]);
 

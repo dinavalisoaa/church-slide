@@ -14,7 +14,7 @@ function Slide() {
   const revealRef = useRef<RevealHandle>(null);
 
   const [controlsLayout] = useState<"edges" | "bottom-right" | undefined>(
-    "edges"
+    "bottom-right"
   );
   const [theme] = useState("sky");
   const [presState] = useState({
@@ -24,15 +24,15 @@ function Slide() {
     paused: false,
     overview: false,
   });
-
   return (
     <>
       <RevealSlides
         key="rs-2"
         scrollSnap="mandatory"
+        backgroundTransition="convex"
         minScale={1}
         maxScale={1}
-        transition="slide"
+        transition="concave"
         width={"100%"}
         margin={0.01}
         controlsLayout={controlsLayout}
@@ -40,6 +40,7 @@ function Slide() {
         plugins={[RevealZoom, RevealNotes]}
         theme={theme}
         ref={revealRef}
+        controls
         // controls={false}
         // plugins={[RevealZoom, RevealNotes]}
         // onStateChange={(state) => console.log(state)}
@@ -52,10 +53,10 @@ function Slide() {
         // transition="slide"
       >
         <Song
-          hira={"ffpm_" + "1"}
+          hira={"ffpm_" + "133"}
           key={1}
-          andininy={"1,3,4 "}
-          title={"FFPM " + "1"}
+          andininy={null}
+          title={"FFPM " + "133"}
         />
         <TransitionPage key={""}
           title="Asa sy fampaherezana"

@@ -7,7 +7,6 @@ pub mod category;
 // pub use query::*;
 pub use types::*;
 pub use category::*;
-
 pub mod dbconnection; 
 
 pub use dbconnection::DbConnection;

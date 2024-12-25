@@ -3,20 +3,20 @@ use std::collections::HashMap;
 use anyhow::Error;
 use async_graphql::{Enum, MergedObject, MergedSubscription,Schema};
 
-use mixer::QueryRoot;
-use mixer::MutationRoot;
+use crate::schemas::category_ql::*;
+// use schemas::CategoryMutation;
 
-pub mod mixer;
+pub mod schemas;
 pub mod book;
 
 #[derive(MergedObject, Default)]
 pub struct Query(
-    QueryRoot,
+    CategoryQuery,
 );
 
 #[derive(MergedObject, Default)]
 pub struct Mutation(
-    MutationRoot
+    CategoryMutation
 );
 
 #[derive(MergedSubscription, Default)]

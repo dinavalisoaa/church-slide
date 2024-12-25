@@ -113,7 +113,25 @@ const Sidebar = ({ open, onToggle }) => {
               primary={open ? "Form" : ""}
             />
           </ListItem>
+          <ListItem button component={Link} to="/type-crud">
+            <ListItemIcon sx={{ color: "white" }}>
+              <Person />
+            </ListItemIcon>
+            <ListItemText
+              sx={{ color: "white" }}
+              primary={open ? "Type de chant" : ""}
+            />
+          </ListItem>
 
+          <ListItem button component={Link} to="/category-song">
+            <ListItemIcon sx={{ color: "white" }}>
+              <Person />
+            </ListItemIcon>
+            <ListItemText
+              sx={{ color: "white" }}
+              primary={open ? "Categorie de chant" : ""}
+            />
+          </ListItem>
           <ListItem button component={Link} to="/">
             <ListItemIcon sx={{ color: "white" }}>
               <Settings />

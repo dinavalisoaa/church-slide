@@ -11,7 +11,9 @@ import 'reveal.js/dist/reveal.css';
 import 'reveal.js/dist/theme/solarized.css'; // You can choose another theme
 import RevealSlides from './RevealSlides';
 import Slide from './components/base/Slide';
-
+import TypesList from './pages/types/TypesList';
+import './Font.css';
+import CategorySongList from './pages/category-song/CategorySongList';
 function App() {
   return (
     <BrowserRouter>
@@ -19,14 +21,16 @@ function App() {
         {/* Pages avec Sidebar */}
         <Route element={<Layout />}>
           <Route path="/" element={<SearchableDashboard />} />
-        <Route path="/form" element={<FormPage />} />
+        <Route path="/type-crud" element={<TypesList  />} />
+        <Route path="/category-song" element={<CategorySongList  />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/tables" element={<TablesPage />} />
-
+        
         </Route>
 
         {/* Pages sans Sidebar */}
         <Route path="/other" element={<Slide />} />
+        <Route path="/tables" element={<TablesPage />} />
+
       </Routes>
     </BrowserRouter>
   );

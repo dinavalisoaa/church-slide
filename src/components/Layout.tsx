@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Sidebar from './Sidebar'
 import MyAppBar from './MyAppBar'
 import { Outlet } from 'react-router-dom'
+import MyToolbar from './MyToolbar'
 
 function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(true)

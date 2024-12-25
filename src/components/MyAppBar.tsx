@@ -16,16 +16,16 @@ const MyAppBar = ({ onToggleSidebar }) => {
   };
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: '#222' }}>
+    <AppBar position="sticky" sx={{ backgroundColor: '#222', fontFamily:'Neue Montreal'}}>
       <Toolbar>
         <IconButton edge="start" color="inherit" onClick={onToggleSidebar} sx={{ mr: 2 }}>
           <Menu />
         </IconButton>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Toolpad-Like App
-        </Typography>
+        <Typography variant="h6" sx={{ flexGrow: 1,fontFamily:"Neue Montreal"  }}>
+         Slide
+                 </Typography>
          {/* Formulaire de recherche */}
-         <form onSubmit={handleSearchSubmit}>
+         {/* <form onSubmit={handleSearchSubmit}>
           <TextField
             value={searchQuery}
             onChange={handleSearchChange}
@@ -45,8 +45,7 @@ const MyAppBar = ({ onToggleSidebar }) => {
               ),
             }}
           />
-        </form>
-        <Button color="inherit">Log Out</Button>
+        </form> */}
       </Toolbar>
     </AppBar>
   )

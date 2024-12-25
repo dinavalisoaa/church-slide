@@ -1,15 +1,43 @@
-import React, { useState } from 'react';
-import { Container, Grid, TextField, MenuItem, Select, InputLabel, FormControl, Box, Button, Typography, TextareaAutosize, Divider, FormControlLabel, Checkbox, FormHelperText } from '@mui/material';
-import { mdiAccount, mdiMail, mdiGithub, mdiBallotOutline } from '@mdi/js';
-import { useForm, Controller } from 'react-hook-form';
+import React, { useState } from "react";
+import {
+  Container,
+  Grid,
+  TextField,
+  Box,
+  Button,InputLabel ,
+  Typography,Divider ,  
+  Card,
+  Menu as MenuIcon,
+  CardContent,FormControlLabel ,
+  CardMedia,Checkbox ,
+  Modal,
+  IconButton,FormControl,
+  InputAdornment,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import { invoke } from "@tauri-apps/api/tauri";
+import { useForm, Controller } from 'react-hook-form';
 
 const selectOptions = [
-  { id: 1, label: 'Business development' },
-  { id: 2, label: 'Marketing' },
-  { id: 3, label: 'Sales' },
+  { id: 1, label: "Business development" },
+  { id: 2, label: "Marketing" },
+  { id: 3, label: "Sales" },
 ];
+const TypesForm = ({ open, setOpen }) => {
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const handleClose = () => setOpen(false);
+  const toggleFullScreen = () => setIsFullScreen(!isFullScreen);
+  const [formData, setFormData] = useState({
+    name: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
+  
 type FormData = {
   name: string;
   email: string;
@@ -22,61 +50,52 @@ type FormData = {
   switch: string[];
   file: File | null;
 };
+const { control, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
+  defaultValues: {
+    name: '',
+    email: '',
+    phone: '',
+    department: selectOptions[0].label,
+    subject: '',
+    question: '',
+    checkbox: ['lorem'],
+    radio: 'one',
+    switch: ['one'],
+    file: null,
+  },
+});
 
-const FormPage: React.FC = () => {
-  const { control, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
-    defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      department: selectOptions[0].label,
-      subject: '',
-      question: '',
-      checkbox: ['lorem'],
-      radio: 'one',
-      switch: ['one'],
-      file: null,
-    },
-  });
+const onSubmit = (data: FormData) => {
+  save();
+  console.log('Form Submitted:', data);
+};
 
-  
-  const save = async () => {
-    console.log("Hello ,,............ ooo"); 
-    const param = {
-      name:'Im Creep'
-     
-    };
-   const s=await invoke("save_types", {
-      form: param,
-    }).then((response) => console.log("................>greet", response));
-    console.log(s,".............");
+const save = async () => {
+  console.log("Hello ,,............ ooo"); 
+  const param = {
+    name:'Im Creep'
+   
   };
-
-  const save_test = async () => {
-
-  };
-
-  const [formStatus, setFormStatus] = useState<'info' | 'success' | 'danger' | 'warning'>('info');
-
-  const onSubmit = (data: FormData) => {
-    save();
-    console.log('Form Submitted:', data);
-  };
-
-  const handleFormStatusChange = () => {
-    const statuses: ('info' | 'success' | 'danger' | 'warning')[] = ['info', 'success', 'danger', 'warning'];
-    setFormStatus(statuses[(statuses.indexOf(formStatus) + 1) % statuses.length]);
-  };
+ const s=await invoke("save_types", {
+    form: param,
+  }).then((response) => console.log("................>greet", response));
+  console.log(s,".............");
+};
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Données du formulaire:", formData);
+  //   handleClose();
+  // };
 
   return (
-    <Container  maxWidth="md-6" sx={{ marginTop: -1 }}>
-      {/* Titre du formulaire */}
-      <Typography variant="h4" component="h1" sx={{ color: 'black',fontWeight: 600, marginBottom: 3 }}>
-        Forms Example
-      </Typography>
-
-      {/* Section de formulaire principal */}
-      <Box
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         sx={{
@@ -101,6 +120,7 @@ const FormPage: React.FC = () => {
                   {...field}
                   label="Nom"
                   fullWidth
+                  value={}
                   variant="outlined"
                   error={!!errors.name}
                   helperText={errors.name?.message}
@@ -155,27 +175,7 @@ const FormPage: React.FC = () => {
           </Grid>
         </Grid>
 
-        {/* Liste déroulante */}
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="department-label">Département</InputLabel>
-              <Controller
-                name="department"
-                control={control}
-                render={({ field }) => (
-                  <Select {...field} labelId="department-label" label="Département">
-                    {selectOptions.map((option) => (
-                      <MenuItem key={option.id} value={option.label}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                )}
-              />
-            </FormControl>
-          </Grid>
-        </Grid>
+     
 
         {/* Question (textarea) */}
         <Grid container spacing={3}>
@@ -235,39 +235,10 @@ const FormPage: React.FC = () => {
         </Box>
 
         {/* Formulaire avec statut */}
-        <Box sx={{ marginTop: 3 }}>
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            Statut du formulaire
-          </Typography>
-          <Box
-            sx={{
-              backgroundColor: formStatus === 'info' ? '#E3F2FD' : formStatus === 'success' ? '#C8E6C9' : formStatus === 'danger' ? '#FFCDD2' : '#FFF9C4',
-              padding: 2,
-              borderRadius: 2,
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Typography color={formStatus === 'info' ? 'primary' : formStatus === 'success' ? 'success' : formStatus === 'danger' ? 'error' : 'warning'}>
-              {formStatus} state
-            </Typography>
-            <Button variant="outlined" color="primary" onClick={handleFormStatusChange}>
-              Changer le statut
-            </Button>
-          </Box>
-        </Box>
+      
       </Box>
-    </Container>
+      </Modal>
+    </>
   );
-};   <Typography
-variant="h5"
-sx={{
-  fontWeight: 400,
-  color: "black",
-  fontFamily: "Neue Montreal",
-}}
->
-Nouveau type de chant
-</Typography>
-
-export default FormPage;
+};
+export default TypesForm;

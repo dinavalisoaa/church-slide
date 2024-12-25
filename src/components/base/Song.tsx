@@ -55,13 +55,41 @@ function Song(props: {
     return res;
   };
 
+  function transformerChaine(chaine, tailleMax) {
+    // Séparer la chaîne en lignes
+    const lignes = chaine.split('\n');
+  
+    // Créer le tableau résultat
+    const resultat = [];
+    let sousTableau = [];
+  
+    lignes.forEach(ligne => {
+      // Si le sous-tableau n'a pas atteint la taille maximale, ajouter la ligne
+      if (sousTableau.length < tailleMax) {
+        sousTableau.push(ligne);
+      } else {
+        // Sinon, ajouter le sous-tableau au résultat et en créer un nouveau
+        resultat.push(sousTableau);
+        sousTableau = [ligne];
+      }
+    });
+  
+    // Ajouter le dernier sous-tableau (si non vide) au résultat
+    if (sousTableau.length > 0) {
+      resultat.push(sousTableau);
+    }
+  
+    return resultat;
+  }
+  
   const splitVerses = (data_hira: Song[]) => {
     const data_vaovao: any[] = [];
     
     data_hira.map((data) => {
     const tononkira = data.tononkira;
     const tononkira_feno = tononkira.split("\n");
-    const decomp = decom(tononkira_feno);
+    const decomp =transformerChaine(tononkira,4);// decom(tononkira_feno);
+    // console.log(data.andininy,"Bref=",transformerChaine(tononkira,3))
       decomp.map((value) => {
         data_vaovao.push({
           andininy: data.andininy,
@@ -83,12 +111,14 @@ function Song(props: {
           (hira, index) =>
             isPresent(hira.andininy) && (
               <section
-                style={{ textWrap: "pretty" }}
+                style={{ whiteSpace:"pre-wrap",
+                  wordWrap: "break-word",
+                  wordBreak: "break-word", 
+                  width: "100%" }}
                 key={(index + 1).toString() + "-1"}
                 hidden={false}
               >
-                <div style={{ fontSize: 100 }}>
-                  <p>{hira.andininy}</p>
+                <div className="r-fit-text" style={{padding:'20px'}}>
                   <Verses data={hira.tononkira} and={hira.andininy} />{" "}
                 </div>
               </section>

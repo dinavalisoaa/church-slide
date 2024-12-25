@@ -37,6 +37,16 @@ impl MigrationTrait for Migration {
                 .if_not_exists()
                 .col(pk_auto(Category::Id))  
                 .col(string(Category::Name))
+                .col(integer(Category::TypeId))
+                .foreign_key(
+                    ForeignKeyCreateStatement::new()
+                        .name("type_category_fk_id")
+                        .from_tbl(Category::Table)
+                        .from_col(Category::TypeId)
+                        .to_tbl(Types::Table)
+                        .to_col(Types::Id)
+                        .on_delete(ForeignKeyAction::Cascade),
+                )  
                 .to_owned(),
         )
         .await;
@@ -98,8 +108,10 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Supprimer la table 'Post'
+        // todo!();
+
         manager
-            .drop_table(Table::drop().table(Post::Table).to_owned())
+            .drop_table(Table::drop().table(Category::Table).to_owned())
             .await
     }
 }
@@ -119,7 +131,8 @@ enum Post {
 enum Category {
     Table,
     Id,
-    Name
+    Name,
+    TypeId
 }
 
 #[derive(Iden)]

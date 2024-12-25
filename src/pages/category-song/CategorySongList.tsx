@@ -13,97 +13,45 @@ import { useForm } from "react-hook-form";
 import CategorySongForm from "./CategorySongForm";
 import { invoke } from "@tauri-apps/api/tauri";
 import { CategorySong } from "../../models/model";
-import CategorySongItem from './CategorySongItem';
+import CategorySongItem from "./CategorySongItem";
+import { useGetCategoryQuery } from "../../graphql/GraphQL";
+const CategorySongList: React.FC = () => {
+  const [datas, setDatas] = useState([]); // State to store categories
+  const { data, loading,refetch } = useGetCategoryQuery({
+    variables: {
+      filter: "",
+      offset: 0,
+      limit: 10,
+    },
+    fetchPolicy: "network-only",
+  });
 
-const selectOptions = [
-  { id: 1, label: "Business development" },
-  { id: 2, label: "Marketing" },
-  { id: 3, label: "Sales" },
-];
-
-type FormData = {
-  name: string;
-  email: string;
-  phone: string;
-  department: string;
-  subject: string;
-  question: string;
-  checkbox: string[];
-  radio: string;
-  switch: string[];
-  file: File | null;
-};
-
-const CategorySongList: React.FC =  () => {
   const [openForm, setOpenForm] = useState(false);
 
   const handleOpenForm = () => setOpenForm(true);
-
-  const { handleSubmit } = useForm<FormData>({
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      department: selectOptions[0].label,
-      subject: "",
-      question: "",
-      checkbox: ["lorem"],
-      radio: "one",
-      switch: ["one"],
-      file: null,
-    },
-  });
   const [searchTerm, setSearchTerm] = useState("");
 
+  const dataCategories = !loading && data ? data.categories : [];
+  // const onFilter = (filter: string) => {
+  //   refetch({ filter });
+  // };
+  // Update state when query data changes
 
-  const onSubmit = (data: FormData) => {
-    // save();
-    // console.log("Form Submitted:", data);
-  };
-  
-  const [listCategorySong, setListCategorySong] = useState<CategorySong[]>([]);
-// const   =async (id)=>{
-//   const result = await invoke("retrieve_type_by_id", {
-//     id:id
-//   }).then((response) => setListCategorySong(response));
-// }
-const fetch = async () => {
-  const result = await invoke("retrieve_category_song", {
-  }).then((response) => setListCategorySong(response));
-};
   useEffect(() => {
-    console.log("data=",listCategorySong);
-    fetch();
-  },[fetch]);
-  
+      setDatas(data.categories);
+  }, [data,setDatas]);
 
+  // Handle loading state
+
+ 
+  // Render component
   return (
-    <>
-      <Container maxWidth="md-6" sx={{ marginTop: "-80px" }}>
-        {/* Section de formulaire principal */}
-        <div
-          style={{
-            display: "flex",
-            alignContent: "center",
-            justifyContent: "space-evenly",
-            flexDirection: "row-reverse",
-            placeContent: "center space-evenly",
-            flexWrap: "nowrap",
-          }}
-        >
-          <Box
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{
-              padding: 4,
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              gap: 3,
-              borderRadius: "19px",
-            }}
-          >
-            <Box
+    <Container maxWidth="md-6" sx={{ marginTop: "-80px" }}>
+      <Box sx={{ padding: 4 }}>
+        <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: 2,color:'red' }}>
+          Catégorie de chant
+        </Typography>
+        <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -119,7 +67,7 @@ const fetch = async () => {
                   fontFamily: "Neue Montreal",
                 }}
               >
-              Catégorie de chant
+                TYPE DE CHANT
               </Typography>
               <Button
                 variant="contained"
@@ -148,20 +96,34 @@ const fetch = async () => {
                 aria-label="Search for a card"
               />
             </Box>
-
-            {/* Diviseur */}
-
-            <Grid container spacing={3}>
-              {/* {filteredCards.map((card, index) => ( */}
-              {listCategorySong.map((element) => (
-                <CategorySongItem values={element}/>
-               ))} 
-              <CategorySongForm open={openForm} setOpen={setOpenForm} />
-            </Grid>
-          </Box>
-        </div>
-      </Container>
-    </>
+        <Grid container spacing={3}>
+          {datas.length > 0 ? (
+            datas.map((category) => (
+              <Grid item xs={12} md={6} key={category.id}>
+                <Box
+                  sx={{
+                    padding: 2,
+                    border: "1px solid #ddd",
+                    borderRadius: "8px",
+                    backgroundColor: "#f9f9f9",
+                  }}
+                >
+                  <Typography variant="h6" sx={{ color: "red" }}>
+                    {category.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "red" }}>
+                    Type:{category.typeInfo.name}
+                  </Typography>
+                </Box>
+              </Grid>
+            ))
+          ) : (
+            <Typography>No categories found.</Typography>
+          )}
+        </Grid>
+        <CategorySongForm open={openForm} setOpen={setOpenForm} />
+      </Box>
+    </Container>
   );
 };
 

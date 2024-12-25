@@ -3,7 +3,7 @@
 #root {
   width: 100vw;
   height: 100vh;
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Noto', sans-serif;
 }
 
 @keyframes fadeIn {
@@ -97,7 +97,7 @@
 
 .project-card:hover {
   margin-top: 0px;
-  box-shadow: rgba(60, 64, 67, 0.5) 0px 1px 2px 0px, rgba(60, 64, 67, 0.25) 0px 2px 4px 2px;
+  box-shadow: rgba(84, 87, 90, 0.5) 0px 1px 2px 0px, rgba(60, 64, 67, 0.25) 0px 2px 4px 2px;
 }
 
 .project-card > div * {

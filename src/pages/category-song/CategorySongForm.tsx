@@ -17,47 +17,60 @@ import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import { useForm, Controller } from "react-hook-form";
 import { invoke } from "@tauri-apps/api/tauri";
 import { CategorySong, TypeSong } from "../../models/model";
+import { useAddCategoryMutation } from "../../graphql/GraphQL";
 
 const CategorySongForm = ({ open, setOpen }) => {
+
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [name, setName] = useState("");
   const handleClose = () => setOpen(false);
 
   const [typeSong, setTypeSong] = useState<TypeSong[]>([]);
 
-  const fetch_types = async () => {
-    const result = await invoke("retrieve_types", {
-    }).then((response) => setTypeSong(response));
-  };
-    useEffect(() => {
-      fetch_types();
-      // console.log(typeSong);
-    },[fetch_types]);
-    
+  const [addCategory, { data, loading, error }] = useAddCategoryMutation();
+
+
+  useEffect(() => {
+    // fetch_types();
+    // console.log(typeSong);
+  }, []);
 
   const toggleFullScreen = () => setIsFullScreen(!isFullScreen);
   type FormData = {
     name: string;
+    typeid: number;
   };
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resetOptions: { keepIsSubmitted: true },defaultValues: {
-          name: "dasodio",
-        },
+    resetOptions: { keepIsSubmitted: true },
+    defaultValues: {
+      name: "dasodio",
+    },
   });
 
   const onSubmit = async (data: FormData) => {
-    console.log("Data here=",data);
-    handleClose();
-    await invoke("save_category_song", {
-      form: {
-        name: data.name,
-        type_id: data.type,
-      },
-    }).then((response));
+    console.log("Data here=", data);
+    // handleClose();
+    // await invoke("save_category_song", {
+    //   form: {
+    //     name: data.name,
+    //     type_id: data.type,
+    //   },
+    // }).then(response);
+    try {
+      const result = await addCategory({
+        variables: {
+          name:data.name,
+          typeId: data.typeid
+        },
+      });
+      console.log("Category added:", result.data?.addCategory);
+    } catch (err) {
+      console.error("Error adding category:", err);
+    }
   };
 
   // const { handleSubmit } = useForm<FormData>({
@@ -149,24 +162,28 @@ const CategorySongForm = ({ open, setOpen }) => {
               />
             </Grid>
 
-          <Grid item xs={12}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="type-song-label">Type de chant</InputLabel>
-              <Controller
-                name="type"
-                control={control}
-                render={({ field }) => (
-                  <Select {...field} labelId="type-song-label" label="Type de chant">
-                    {typeSong.map((option) => (
-                      <MenuItem key={option.id} value={option.id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                )}
-              />
-            </FormControl>
-          </Grid>
+            <Grid item xs={12}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel id="type-song-label">Type de chant</InputLabel>
+                <Controller
+                   name="typeid"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      labelId="type-song-label"
+                      label="Type de chant"
+                    >
+                      {/* {typeSong.map((option) => ( */}
+                        <MenuItem key="1" value={1}>
+                         Tsiky sy tomany
+                        </MenuItem>
+                      {/* ))} */}
+                    </Select>
+                  )}
+                />
+              </FormControl>
+            </Grid>
           </Grid>
 
           {/* Boutons d'action */}
