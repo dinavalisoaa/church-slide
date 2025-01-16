@@ -113,9 +113,10 @@ const fetch = async () => {
                   fontFamily: "Neue Montreal",
                 }}
               >
-                TYPE DE CHANT
+                sTYPE DE CHANT
+
               </Typography>
-              <Button
+                <Button
                 variant="contained"
                 color="primary"
                 sx={{ fontFamily: "Neue Montreal", fontWeight: 500 }}

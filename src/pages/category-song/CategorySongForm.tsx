@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import {
-  Grid,
-  TextField,
-  Box,
-  Button,
-  Typography,
-  Modal,
-  IconButton,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
+    Grid,
+    TextField,
+    Box,
+    Typography,
+    Modal,
+    IconButton,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select, Button,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
@@ -19,7 +18,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { CategorySong, TypeSong } from "../../models/model";
 import { useAddCategoryMutation } from "../../graphql/GraphQL";
 
-const CategorySongForm = ({ open, setOpen }) => {
+const CategorySongForm = ({ open, setOpen,onCategoryAdded }) => {
 
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [name, setName] = useState("");
@@ -53,13 +52,7 @@ const CategorySongForm = ({ open, setOpen }) => {
 
   const onSubmit = async (data: FormData) => {
     console.log("Data here=", data);
-    // handleClose();
-    // await invoke("save_category_song", {
-    //   form: {
-    //     name: data.name,
-    //     type_id: data.type,
-    //   },
-    // }).then(response);
+   
     try {
       const result = await addCategory({
         variables: {
@@ -67,7 +60,8 @@ const CategorySongForm = ({ open, setOpen }) => {
           typeId: data.typeid
         },
       });
-      console.log("Category added:", result.data?.addCategory);
+      onCategoryAdded(result.data.createcategory);
+      console.log("Category added:", result.data);
     } catch (err) {
       console.error("Error adding category:", err);
     }

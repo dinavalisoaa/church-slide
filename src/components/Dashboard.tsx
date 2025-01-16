@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardContent, Typography, Button, Divider, Box } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Divider, Box } from '@mui/material';
 import { mdiAccountMultiple, mdiCartOutline, mdiChartTimelineVariant, mdiMonitorCellphone, mdiReload, mdiGithub, mdiChartPie } from '@mdi/js';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -64,7 +64,7 @@ const Dashboard: React.FC = () => {
   return (
     <Box sx={{ padding: 4 }}>
       {/* Header Section */}
-      <Typography variant="h4" gutterBottom>Overview</Typography>
+      <Typography variant="h4" gutterBottom>Overvieaw</Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
           <Card>
@@ -131,7 +131,7 @@ const Dashboard: React.FC = () => {
       </Grid>
 
       {/* Trends Overview Section */}
-      <Typography variant="h5" sx={{ marginTop: 6 }}>Trends Overview</Typography>
+      <Typography variant="h5" sx={{ marginTop: 6 }}>Trends Overview____</Typography>
       <Card sx={{ marginTop: 2 }}>
         <CardContent>
           <ResponsiveContainer width="100%" height={400}>
@@ -151,7 +151,7 @@ const Dashboard: React.FC = () => {
 
       {/* GitHub Banner Section */}
       <Box sx={{ marginTop: 4, textAlign: 'center' }}>
-        <Button
+        {/* <Button
           href="https://github.com/justboil/admin-one-vue-tailwind"
           target="_blank"
           variant="contained"
@@ -159,6 +159,9 @@ const Dashboard: React.FC = () => {
           startIcon={<mdiGithub />}
         >
           Star on GitHub
+        </Button> */}
+        <Button>
+          UIUO
         </Button>
       </Box>
     </Box>

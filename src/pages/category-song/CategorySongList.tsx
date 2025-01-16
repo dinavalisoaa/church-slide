@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
   Container,
   Grid,
@@ -15,6 +16,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { CategorySong } from "../../models/model";
 import CategorySongItem from "./CategorySongItem";
 import { useGetCategoryQuery } from "../../graphql/GraphQL";
+
 const CategorySongList: React.FC = () => {
   const [datas, setDatas] = useState([]); // State to store categories
   const { data, loading,refetch } = useGetCategoryQuery({
@@ -38,10 +40,14 @@ const CategorySongList: React.FC = () => {
   // Update state when query data changes
 
   useEffect(() => {
-      setDatas(data.categories);
+      setDatas(data?.categories);
   }, [data,setDatas]);
 
+  useEffect(()=>{},[])
   // Handle loading state
+const handleCategoryAdded = (newCategory) => {
+    setDatas((prevDatas) => [...prevDatas, newCategory]);
+  };
 
  
   // Render component
@@ -49,7 +55,7 @@ const CategorySongList: React.FC = () => {
     <Container maxWidth="md-6" sx={{ marginTop: "-80px" }}>
       <Box sx={{ padding: 4 }}>
         <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: 2,color:'red' }}>
-          Catégorie de chant
+          Catégorie de chant 
         </Typography>
         <Box
               sx={{
@@ -67,7 +73,7 @@ const CategorySongList: React.FC = () => {
                   fontFamily: "Neue Montreal",
                 }}
               >
-                TYPE DE CHANT
+                sTYPE DE CHANT
               </Typography>
               <Button
                 variant="contained"
@@ -97,9 +103,9 @@ const CategorySongList: React.FC = () => {
               />
             </Box>
         <Grid container spacing={3}>
-          {datas.length > 0 ? (
-            datas.map((category) => (
-              <Grid item xs={12} md={6} key={category.id}>
+          {datas?.length > 0 ? (
+            datas?.map((category) => (
+              <Grid item xs={12} md={6} key={category?.id}>
                 <Box
                   sx={{
                     padding: 2,
@@ -109,10 +115,10 @@ const CategorySongList: React.FC = () => {
                   }}
                 >
                   <Typography variant="h6" sx={{ color: "red" }}>
-                    {category.name}
+                    {category?.name}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "red" }}>
-                    Type:{category.typeInfo.name}
+                    Type:{category?.typeInfo?.name}
                   </Typography>
                 </Box>
               </Grid>
@@ -121,7 +127,7 @@ const CategorySongList: React.FC = () => {
             <Typography>No categories found.</Typography>
           )}
         </Grid>
-        <CategorySongForm open={openForm} setOpen={setOpenForm} />
+        <CategorySongForm open={openForm} setOpen={setOpenForm}  onCategoryAdded={handleCategoryAdded}/>
       </Box>
     </Container>
   );

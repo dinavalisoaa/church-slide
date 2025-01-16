@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardContent, Typography, Button, Divider, Box } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Divider, Box } from '@mui/material';
 import { mdiAccountMultiple, mdiCartOutline, mdiChartTimelineVariant, mdiMonitorCellphone, mdiReload, mdiGithub, mdiChartPie } from '@mdi/js';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -42,7 +42,7 @@ const Dashboard: React.FC = () => {
       { id: 1, name: 'John Doe', login: 'john.doe', created: '2021-08-10', progress: 75 },
       { id: 2, name: 'Jane Smith', login: 'jane.smith', created: '2021-07-22', progress: 55 },
       { id: 3, name: 'Jim Beam', login: 'jim.beam', created: '2021-06-15', progress: 40 },
-      { id: 4, name: 'Jack Daniels', login: 'jack.daniels', created: '2021-05-02', progress: 90 },
+      { id: 4, name: '11Jack Daniels', login: 'jack.daniels', created: '2021-05-02', progress: 90 },
     ]);
   };
 
@@ -61,44 +61,45 @@ const Dashboard: React.FC = () => {
     fetchTransactionData();
   }, []);
 
-  return (
-    <Box sx={{ padding: 4 }}>
-      {/* Header Section */}
-      <Typography variant="h4" gutterBottom>Overview</Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={4}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" color="text.secondary">Clients</Typography>
-              <Typography variant="h5">512</Typography>
-              <Typography variant="body2" color="text.secondary">12% ↑</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" color="text.secondary">Sales</Typography>
-              <Typography variant="h5">$7770</Typography>
-              <Typography variant="body2" color="text.secondary">12% ↓</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" color="text.secondary">Performance</Typography>
-              <Typography variant="h5">256%</Typography>
-              <Typography variant="body2" color="text.secondary">Alert</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+  return (<>
+  <div><Box sx={{padding: 4}}>
+    {/* Header Section */}
+    <Typography variant="h4" gutterBottom>Overview</Typography>
+    <Grid container spacing={3}>
+      <Grid item xs={12} sm={4}>
+        <Card>
+          <CardContent>
 
-      {/* Transactions and Clients Section */}
-      <Typography variant="h5" sx={{ marginTop: 4 }}>Recent Transactions</Typography>
-      <Grid container spacing={3}>
-        {transactions.map((transaction, index) => (
+            <Typography variant="h6" color="text.secondary">Clisents</Typography>
+            <Typography variant="h5">512</Typography>
+            <Typography variant="body2" color="text.secondary">12% ↑</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} sm={4}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" color="text.secondary">Sales</Typography>
+            <Typography variant="h5">$7770</Typography>
+            <Typography variant="body2" color="text.secondary">12% ↓</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} sm={4}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" color="text.secondary">Performance</Typography>
+            <Typography variant="h5">256%</Typography>
+            <Typography variant="body2" color="text.secondary">Alert</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+
+    {/* Transactions and Clients Section */}
+    <Typography variant="h5" sx={{marginTop: 4}}>Recent Transactions</Typography>
+    <Grid container spacing={3}>
+      {transactions.map((transaction, index) => (
           <Grid item xs={12} sm={6} key={index}>
             <Card>
               <CardContent>
@@ -109,14 +110,14 @@ const Dashboard: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-        ))}
-      </Grid>
+      ))}
+    </Grid>
 
-      <Divider sx={{ marginTop: 4 }} />
+    <Divider sx={{marginTop: 4}}/>
 
-      <Typography variant="h5" sx={{ marginTop: 4 }}>Clients Overview</Typography>
-      <Grid container spacing={3}>
-        {clients.map((client) => (
+    <Typography variant="h5" sx={{marginTop: 4}}>Clients Overview</Typography>
+    <Grid container spacing={3}>
+      {clients.map((client) => (
           <Grid item xs={12} sm={6} key={client.id}>
             <Card>
               <CardContent>
@@ -127,41 +128,39 @@ const Dashboard: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-        ))}
-      </Grid>
+      ))}
+    </Grid>
 
-      {/* Trends Overview Section */}
-      <Typography variant="h5" sx={{ marginTop: 6 }}>Trends Overview</Typography>
-      <Card sx={{ marginTop: 2 }}>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={400}>
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="value" stroke="#8884d8" />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+    {/* Trends Overview Section */}
+    <Typography variant="h5" sx={{marginTop: 6}}>Trends Overview</Typography>
+    <Card sx={{marginTop: 2}}>
+      <CardContent>
+        <ResponsiveContainer width="100%" height={400}>
+          <LineChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3"/>
+            <XAxis dataKey="name"/>
+            <YAxis/>
+            <Tooltip/>
+            <Legend/>
+            <Line type="monotone" dataKey="value" stroke="#8884d8"/>
+          </LineChart>
+        </ResponsiveContainer>
+      </CardContent>
 
-      <Divider sx={{ marginTop: 4 }} />
+    </Card>
 
-      {/* GitHub Banner Section */}
-      <Box sx={{ marginTop: 4, textAlign: 'center' }}>
-        <Button
-          href="https://github.com/justboil/admin-one-vue-tailwind"
-          target="_blank"
-          variant="contained"
-          color="primary"
-          startIcon={<mdiGithub />}
-        >
-          Star on GitHub
-        </Button>
-      </Box>
+    <Divider sx={{marginTop: 4}}/>
+
+    {/* GitHub Banner Section */}
+    <Box sx={{marginTop: 4, textAlign: 'center'}}>
+
     </Box>
+  </Box></div>
+        <div>
+
+        </div>
+      </>
+
   );
 };
 

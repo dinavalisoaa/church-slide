@@ -268,6 +268,7 @@ sx={{
 }}
 >
 Nouveau type de chant
+
 </Typography>
 
 export default FormPage;
