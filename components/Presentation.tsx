@@ -43,7 +43,7 @@ export default function Presentation({ role, secret, id, src }: { role: string, 
         }
     }, []);
 
-    // Assumption: onContentReady happens after the reveal object is created
+    // Assumption: onContentReady happens after twhe reveal object is created
     const onContentReady = () => {
         console.log('content ready');
         if (!initialised) {
@@ -58,7 +58,9 @@ export default function Presentation({ role, secret, id, src }: { role: string, 
         <p>{role} presentation...</p>
         <div className="reveal" style={{ width: '100%', flexGrow: 1, border: 'solid 1px black' }}>
             <div className="slides">
-                <PresentationContent src={src} onLoaded={onContentReady} />
+                <section key="1">
+                    <h2>dina</h2>
+                </section>
             </div>
         </div>
     </>);

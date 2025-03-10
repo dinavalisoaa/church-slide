@@ -1,0 +1,42 @@
+[package]
+name = "graphql"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+name = "slide_graphql"
+path = "src/schema.rs"
+
+
+
+
+[dependencies]
+service = { path = "../service" }
+entity = { path = "../entity" }
+repository = { path = "../repository" }
+async-std = { version = "1", features = ["attributes", "tokio1"] }
+anyhow = "1.0.71"
+dotenvy = "0.15.7"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+async-graphql = "5.0"
+async-graphql-tide = "5.0"
+futures-util = "0.3"
+tide = "0.16"
+serde = { version = "1.0", features = ["derive"] }
+
+
+[dependencies.sea-orm]
+version = "1.0.1"
+features = [ "sqlx-sqlite", "runtime-tokio-rustls", "macros" ]
+default-features = false
+
+[dependencies.sea-orm-migration]
+version = "1.0.0"
+features = [
+  # Enable at least one `ASYNC_RUNTIME` and `DATABASE_DRIVER` feature if you want to run migration via CLI.
+  # View the list of supported features at https://www.sea-ql.org/SeaORM/docs/install-and-config/database-and-async-runtime.
+  # e.g.
+ "runtime-tokio-rustls",  # `ASYNC_RUNTIME` feature
+   "sqlx-sqlite",         # `DATABASE_DRIVER` feature
+]
