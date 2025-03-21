@@ -16,7 +16,7 @@ export class SongCategoryService {
                createcategory(name: $name, typeId: $typeId) {
                  id
                  name
-                 typeInfo {
+                 types {
                    id
                    name
                  }
@@ -34,7 +34,7 @@ export class SongCategoryService {
                     categories {
                         id
                         name
-                        typeInfo {
+                        types {
                             id
                             name
                         }

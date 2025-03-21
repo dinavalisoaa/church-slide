@@ -1,0 +1,78 @@
+CREATE TABLE type (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom TEXT NOT NULL
+);
+
+CREATE TABLE categorie (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom TEXT NOT NULL,
+    typeID INTEGER,
+    FOREIGN KEY (typeID) REFERENCES type(id)
+);
+
+CREATE TABLE song (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titre TEXT NOT NULL,
+    reference TEXT,
+    categorieID INTEGER,
+    FOREIGN KEY (categorieID) REFERENCES categorie(id)
+);
+
+CREATE TABLE verses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    songID INTEGER,
+    reference TEXT,
+    lyrics TEXT NOT NULL,
+    FOREIGN KEY (songID) REFERENCES song(id)
+);
+
+CREATE TABLE program (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date DATE NOT NULL,
+    nom TEXT NOT NULL,
+    templateID INTEGER
+);
+
+CREATE TABLE transitionPage (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titre TEXT NOT NULL,
+    description TEXT,
+    image TEXT
+);
+
+CREATE TABLE vakitenyPage (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom TEXT NOT NULL
+);
+
+CREATE TABLE scriptures (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    boky TEXT NOT NULL,
+    toko INTEGER NOT NULL,
+    and_fin INTEGER NOT NULL
+);
+
+CREATE TABLE vakitenyPageDetail (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    vakitenyPageID INTEGER,
+    scriptureID INTEGER,
+    FOREIGN KEY (vakitenyPageID) REFERENCES vakitenyPage(id),
+    FOREIGN KEY (scriptureID) REFERENCES scriptures(id)
+);
+
+CREATE TABLE programDetail (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    songID INTEGER,
+    verses TEXT, -- Stocke les numéros de versets sous forme de texte (ex: "1,2,4")
+    backgroundImage TEXT,
+    transitionPageID INTEGER,
+    vakitenyPageID INTEGER,
+    fanekenaID INTEGER,
+    ordre INTEGER NOT NULL,
+    templateID INTEGER,
+    programID INTEGER,
+    FOREIGN KEY (songID) REFERENCES song(id),
+    FOREIGN KEY (transitionPageID) REFERENCES transitionPage(id),
+    FOREIGN KEY (vakitenyPageID) REFERENCES vakitenyPage(id),
+    FOREIGN KEY (programID) REFERENCES program(id)
+);

@@ -1,6 +1,8 @@
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
+use crate::category;
+use crate::author;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "song")]
 pub struct Model {
@@ -10,8 +12,11 @@ pub struct Model {
     pub title: String,
     pub category_id: i32,  // Foreign key to the Post model
     pub author_id: i32,
-    pub number: i32,
-    pub verses: String
+    pub reference: String,
+  #[sea_orm(ignore)]
+    pub category: Option<category::Model>,
+  #[sea_orm(ignore)]
+    pub author: Option<author::Model>
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

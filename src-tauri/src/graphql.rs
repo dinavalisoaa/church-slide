@@ -32,7 +32,7 @@ pub async fn create_graphql_server() -> tide::Result<()> {
 app.with(cors); // Ajoute le middleware à l'application
 
 app.at("/graphql").post(graphql(schema));
-println!("GraphQL server running on http://localhost:8080/graphql");
-app.listen("127.0.0.1:8080").await?;
+println!("GraphQL server running on http://localhost:6969/graphql");
+app.listen("127.0.0.1:6969").await?;
 Ok(())
 }

@@ -1,0 +1,321 @@
+use sea_orm_migration::{prelude::*, schema::*};
+
+#[derive(DeriveMigrationName)]
+pub struct Migration;
+
+#[async_trait::async_trait]
+impl MigrationTrait for Migration {
+    async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        // Create type table
+        manager
+            .create_table(
+                Table::create()
+                    .table(Type::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Type::Id))
+                    .col(string(Type::Nom))
+                    .to_owned(),
+            )
+            .await?;
+
+        // Create categorie table
+        manager
+            .create_table(
+                Table::create()
+                    .table(Categorie::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Categorie::Id))
+                    .col(string(Categorie::Nom))
+                    .col(integer(Categorie::TypeId))
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_categorie_type")
+                            .from(Categorie::Table, Categorie::TypeId)
+                            .to(Type::Table, Type::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
+        // Create song table
+        manager
+            .create_table(
+                Table::create()
+                    .table(Song::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Song::Id))
+                    .col(string(Song::Titre))
+                    .col(string_null(Song::Reference))
+                    .col(integer(Song::CategorieId))
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_song_categorie")
+                            .from(Song::Table, Song::CategorieId)
+                            .to(Categorie::Table, Categorie::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
+        // Create verses table
+        manager
+            .create_table(
+                Table::create()
+                    .table(Verses::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Verses::Id))
+                    .col(integer(Verses::SongId))
+                    .col(string_null(Verses::Reference))
+                    .col(string(Verses::Lyrics))
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_verses_song")
+                            .from(Verses::Table, Verses::SongId)
+                            .to(Song::Table, Song::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
+        // Create program table
+        manager
+            .create_table(
+                Table::create()
+                    .table(Program::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Program::Id))
+                    .col(date(Program::Date))
+                    .col(string(Program::Nom))
+                    .col(integer_null(Program::TemplateId))
+                    .to_owned(),
+            )
+            .await?;
+
+        // Create transition_page table
+        manager
+            .create_table(
+                Table::create()
+                    .table(TransitionPage::Table)
+                    .if_not_exists()
+                    .col(pk_auto(TransitionPage::Id))
+                    .col(string(TransitionPage::Titre))
+                    .col(string_null(TransitionPage::Description))
+                    .col(string_null(TransitionPage::Image))
+                    .to_owned(),
+            )
+            .await?;
+
+        // Create vakiteny_page table
+        manager
+            .create_table(
+                Table::create()
+                    .table(VakitenyPage::Table)
+                    .if_not_exists()
+                    .col(pk_auto(VakitenyPage::Id))
+                    .col(string(VakitenyPage::Nom))
+                    .to_owned(),
+            )
+            .await?;
+
+        // Create scriptures table
+        manager
+            .create_table(
+                Table::create()
+                    .table(Scriptures::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Scriptures::Id))
+                    .col(string(Scriptures::Boky))
+                    .col(integer(Scriptures::Toko))
+                    .col(integer(Scriptures::AndFin))
+                    .to_owned(),
+            )
+            .await?;
+
+        // Create vakiteny_page_detail table
+        manager
+            .create_table(
+                Table::create()
+                    .table(VakitenyPageDetail::Table)
+                    .if_not_exists()
+                    .col(pk_auto(VakitenyPageDetail::Id))
+                    .col(integer(VakitenyPageDetail::VakitenyPageId))
+                    .col(integer(VakitenyPageDetail::ScriptureId))
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_vakiteny_page_detail_vakiteny")
+                            .from(VakitenyPageDetail::Table, VakitenyPageDetail::VakitenyPageId)
+                            .to(VakitenyPage::Table, VakitenyPage::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_vakiteny_page_detail_scripture")
+                            .from(VakitenyPageDetail::Table, VakitenyPageDetail::ScriptureId)
+                            .to(Scriptures::Table, Scriptures::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
+        // Create program_detail table
+        manager
+            .create_table(
+                Table::create()
+                    .table(ProgramDetail::Table)
+                    .if_not_exists()
+                    .col(pk_auto(ProgramDetail::Id))
+                    .col(integer_null(ProgramDetail::SongId))
+                    .col(string_null(ProgramDetail::Verses))
+                    .col(string_null(ProgramDetail::BackgroundImage))
+                    .col(integer_null(ProgramDetail::TransitionPageId))
+                    .col(integer_null(ProgramDetail::VakitenyPageId))
+                    .col(integer_null(ProgramDetail::FanekenaId))
+                    .col(integer(ProgramDetail::Ordre))
+                    .col(integer_null(ProgramDetail::TemplateId))
+                    .col(integer(ProgramDetail::ProgramId))
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_program_detail_song")
+                            .from(ProgramDetail::Table, ProgramDetail::SongId)
+                            .to(Song::Table, Song::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_program_detail_transition")
+                            .from(ProgramDetail::Table, ProgramDetail::TransitionPageId)
+                            .to(TransitionPage::Table, TransitionPage::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_program_detail_vakiteny")
+                            .from(ProgramDetail::Table, ProgramDetail::VakitenyPageId)
+                            .to(VakitenyPage::Table, VakitenyPage::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_program_detail_program")
+                            .from(ProgramDetail::Table, ProgramDetail::ProgramId)
+                            .to(Program::Table, Program::Id)
+                            .on_delete(ForeignKeyAction::Cascade),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+
+        Ok(())
+    }
+
+    async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        // Drop tables in reverse order to respect foreign key constraints
+        manager.drop_table(Table::drop().table(ProgramDetail::Table).to_owned()).await?;
+        manager.drop_table(Table::drop().table(VakitenyPageDetail::Table).to_owned()).await?;
+        manager.drop_table(Table::drop().table(Scriptures::Table).to_owned()).await?;
+        manager.drop_table(Table::drop().table(VakitenyPage::Table).to_owned()).await?;
+        manager.drop_table(Table::drop().table(TransitionPage::Table).to_owned()).await?;
+        manager.drop_table(Table::drop().table(Program::Table).to_owned()).await?;
+        manager.drop_table(Table::drop().table(Verses::Table).to_owned()).await?;
+        manager.drop_table(Table::drop().table(Song::Table).to_owned()).await?;
+        manager.drop_table(Table::drop().table(Categorie::Table).to_owned()).await?;
+        manager.drop_table(Table::drop().table(Type::Table).to_owned()).await?;
+
+        Ok(())
+    }
+}
+
+// Enum definitions for all tables
+#[derive(Iden)]
+enum Type {
+    Table,
+    Id,
+    Nom,
+}
+
+#[derive(Iden)]
+enum Categorie {
+    Table,
+    Id,
+    Nom,
+    TypeId,
+}
+
+#[derive(Iden)]
+enum Song {
+    Table,
+    Id,
+    Titre,
+    Reference,
+    CategorieId,
+}
+
+#[derive(Iden)]
+enum Verses {
+    Table,
+    Id,
+    SongId,
+    Reference,
+    Lyrics,
+}
+
+#[derive(Iden)]
+enum Program {
+    Table,
+    Id,
+    Date,
+    Nom,
+    TemplateId,
+}
+
+#[derive(Iden)]
+enum TransitionPage {
+    Table,
+    Id,
+    Titre,
+    Description,
+    Image,
+}
+
+#[derive(Iden)]
+enum VakitenyPage {
+    Table,
+    Id,
+    Nom,
+}
+
+#[derive(Iden)]
+enum Scriptures {
+    Table,
+    Id,
+    Boky,
+    Toko,
+    AndFin,
+}
+
+#[derive(Iden)]
+enum VakitenyPageDetail {
+    Table,
+    Id,
+    VakitenyPageId,
+    ScriptureId,
+}
+
+#[derive(Iden)]
+enum ProgramDetail {
+    Table,
+    Id,
+    SongId,
+    Verses,
+    BackgroundImage,
+    TransitionPageId,
+    VakitenyPageId,
+    FanekenaId,
+    Ordre,
+    TemplateId,
+    ProgramId,
+}

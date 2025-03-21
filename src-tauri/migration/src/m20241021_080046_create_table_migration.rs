@@ -11,20 +11,20 @@ impl MigrationTrait for Migration {
             Table::create()
                 .table(Types::Table)
                 .if_not_exists()
-                .col(pk_auto(Types::Id))  
+                .col(pk_auto(Types::Id))
                 .col(string(Types::Name))
                 .to_owned(),
         )
         .await;
-      
 
-      
+
+
         manager
         .create_table(
             Table::create()
                 .table(Author::Table)
                 .if_not_exists()
-                .col(pk_auto(Author::Id))  
+                .col(pk_auto(Author::Id))
                 .col(string(Author::Name))
                 .to_owned(),
         )
@@ -35,7 +35,7 @@ impl MigrationTrait for Migration {
             Table::create()
                 .table(Category::Table)
                 .if_not_exists()
-                .col(pk_auto(Category::Id))  
+                .col(pk_auto(Category::Id))
                 .col(string(Category::Name))
                 .col(integer(Category::TypeId))
                 .foreign_key(
@@ -46,7 +46,7 @@ impl MigrationTrait for Migration {
                         .to_tbl(Types::Table)
                         .to_col(Types::Id)
                         .on_delete(ForeignKeyAction::Cascade),
-                )  
+                )
                 .to_owned(),
         )
         .await;
@@ -56,8 +56,9 @@ impl MigrationTrait for Migration {
                 Table::create()
                     .table(Song::Table)
                     .if_not_exists()
-                    .col(pk_auto(Song::Id))  
+                    .col(pk_auto(Song::Id))
                     .col(string(Song::Title))
+                    .col(string(Song::Reference))
                     .col(integer(Song::CategoryId))
                     .foreign_key(
                         ForeignKeyCreateStatement::new()
@@ -67,7 +68,7 @@ impl MigrationTrait for Migration {
                             .to_tbl(Category::Table)
                             .to_col(Category::Id)
                             .on_delete(ForeignKeyAction::Cascade),
-                    )  
+                    )
                     .col(integer(Song::AuthorId))
                     .foreign_key(
                         ForeignKeyCreateStatement::new()
@@ -77,20 +78,19 @@ impl MigrationTrait for Migration {
                             .to_tbl(Author::Table)
                             .to_col(Author::Id)
                             .on_delete(ForeignKeyAction::Cascade),
-                    ) 
-                    .col(string(Song::Verses))
+                    )
                     .to_owned(),
             )    .await;
-        
-            // Create Song table
+
+            // Create Verse table
             manager
             .create_table(
                 Table::create()
                     .table(Verses::Table)
                     .if_not_exists()
-                    .col(pk_auto(Verses::Id))  
-                    .col(string(Verses::Number))
-                    .col(boolean(Verses::Returns))
+                    .col(pk_auto(Verses::Id))
+                    .col(string(Verses::Reference))
+                    .col(string(Verses::Lyrics))
                     .col(integer(Verses::SongId))
                     .foreign_key(
                         ForeignKeyCreateStatement::new()
@@ -100,7 +100,7 @@ impl MigrationTrait for Migration {
                             .to_tbl(Song::Table)
                             .to_col(Song::Id)
                             .on_delete(ForeignKeyAction::Cascade),
-                    )  
+                    )
                     .to_owned(),
             )
             .await
@@ -112,20 +112,13 @@ impl MigrationTrait for Migration {
 
         manager
             .drop_table(Table::drop().table(Category::Table).to_owned())
+            .await;
+        manager
+            .drop_table(Table::drop().table(Song::Table).to_owned())
             .await
     }
 }
 
-
-#[derive(Iden)]
-enum Post {
-    Table,
-    Id,
-    Title,
-    Amount,
-    Text,
-    Verification
-}
 
 #[derive(Iden)]
 enum Category {
@@ -153,12 +146,11 @@ enum Author {
 #[derive(Iden)]
 enum Song {
     Table,
-    Id, 
+    Id,
     Title,
     CategoryId,
     AuthorId,
-    Number,
-    Verses
+    Reference
 }
 
 
@@ -166,8 +158,7 @@ enum Song {
 enum Verses {
     Table,
     Id,
-    SongId,  
-    Text,
-    Number,
-    Returns
+    SongId,
+    Lyrics,
+    Reference
 }

@@ -10,7 +10,7 @@ impl MigrationTrait for Migration {
         manager
             .alter_table(
                 Table::alter()
-                    .table(Post::Table)
+                    .table(Verses::Table)
                     .add_column(
                         ColumnDef::new(Post::PublishedAt)
                         .date_time()

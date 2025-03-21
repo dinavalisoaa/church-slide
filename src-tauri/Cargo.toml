@@ -1,0 +1,52 @@
+[package]
+name = "tauri-seaorm-template"
+version = "0.0.0"
+description = "A Tauri App"
+authors = ["you"]
+license = ""
+repository = ""
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+
+[lib]
+name = "graphql"
+path = "src/graphql.rs"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies.sea-orm]
+version = "1.0.1"
+
+features = [ "sqlx-sqlite", "runtime-tokio-rustls", "macros" ]
+default-features = false
+
+[dependencies]
+tauri = { version = "1.8.1", features = ["shell-open"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "sqlite"] }
+tokio = { version = "1.29.0", features = ["full"] }
+anyhow = "1.0.71"
+dotenvy = "0.15.7"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+async-graphql = "5.0"
+async-graphql-tide = "5.0"
+futures-util = "0.3"
+tide = "0.16"
+migration = { path = "./migration" }
+repository = { path = "./repository" }
+entity = { path = "./entity" }
+graphql = { path = "./graphql" }
+controller = { path = "./controller" }
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]
+
+[workspace]
+members = [".", "service", "entity", "migration"]

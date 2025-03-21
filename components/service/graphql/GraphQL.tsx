@@ -26,7 +26,7 @@ query categories($filter: String, $offset: Int, $limit: Int) {
   categories(filter: $filter, offset: $offset, limit: $limit) {
     id
     name
-    typeInfo {
+    types {
       id
       name
     }
@@ -40,7 +40,7 @@ export type GetCategoryQuery = {
       __typename?: "Category";
       id: string;
       name: string;
-      typeInfo: {
+      types: {
         __typename?: "Types";
         id: string;
         name: string;
@@ -74,7 +74,7 @@ export type AddCategoryMutation = {
     __typename?: "Category";
     id: string;
     name: string;
-    typeInfo: {
+    types: {
       __typename?: "Types";
       id: string;
       name: string;
@@ -87,7 +87,7 @@ export const AddCategoryDocument = gql`
     createcategory(name: $name, typeId: $typeId) {
       id
       name
-      typeInfo {
+      types {
         id
         name
       }

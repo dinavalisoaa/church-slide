@@ -27,13 +27,14 @@ pub struct CategoryMutation;
 pub struct CategoryDTO {
     pub id: i32,
     pub name: String,
-    pub typeInfo: Option<TypeDTO>
+    pub types: Option<TypeDTO>,
+    pub type_id : i32
 }
 
 #[Object]
 impl CategoryQuery {
 
-    async fn findById(
+    async fn find_category_by_id(
         &self,
         ctx: &Context<'_>,
         id: i32, 
@@ -46,10 +47,11 @@ impl CategoryQuery {
             let category_dto = CategoryDTO {
                 id: category.id,
                 name: category.name,
-                typeInfo: related_types.into_iter().next().map(|t| TypeDTO {
+                types: related_types.into_iter().next().map(|t| TypeDTO {
                     id: t.id,
                     name: t.name,
                 }),
+                type_id: 0,
             };
     
             Ok(Some(category_dto))
@@ -58,7 +60,7 @@ impl CategoryQuery {
         }
     }
     
-    async fn categories(
+    async fn all_categories(
         &self, 
         ctx: &Context<'_>, 
         filter: Option<String>, 
@@ -93,10 +95,11 @@ impl CategoryQuery {
                 CategoryDTO {
                     id: category.id,
                     name: category.name,
-                    typeInfo: types.into_iter().next().map(|t| TypeDTO {
+                    types: types.into_iter().next().map(|t| TypeDTO {
                         id: t.id,
                         name: t.name,
                     }),
+                    type_id: 0,
                 }
             })
             .collect();
@@ -107,16 +110,16 @@ impl CategoryQuery {
 
 #[Object]
 impl CategoryMutation {
-    async fn createcategory(
+    async fn create_category(
         &self,
         ctx: &Context<'_>,
         name: String,
-        type_id: i32, 
+        type_id: i32,
     ) -> Result<CategoryDTO, Error> {
         let db = ctx.data::<DbConnection>().unwrap();
 
         if name.trim().is_empty() {
-            return Err(Error::msg("Le nom de la catégorie ne peut pas être vide."));
+            return Err(Error::msg("Le nom de la catégorise ne peut pas être vide."));
         }
 
         let new_category = category::ActiveModel {
@@ -131,18 +134,19 @@ impl CategoryMutation {
                 Ok(CategoryDTO {
                     id: inserted_category.id,
                     name: inserted_category.name,
-                    typeInfo: None, 
+                    types: None,
+                    type_id,
                 })
             }
-            Err(err) => {return Err(Error::msg("Le nom de la catégorie ne peut pas être vide."));
+            Err(err) => {
                 Err(Error::msg(format!(
                     "Erreur lors de la création de la catégorie : {}",
                     err)))
             }
         }
     }
-   
-    async fn updateById(
+
+    async fn update_category_by_id(
         &self,
         ctx: &Context<'_>,
         id: i32,
@@ -169,7 +173,8 @@ impl CategoryMutation {
                 Ok(CategoryDTO {
                     id: inserted_category.id,
                     name: inserted_category.name,
-                    typeInfo: None, 
+                    types: None,
+                    type_id,
                 })
             }
             Err(err) => {return Err(Error::msg("Le nom de la catégorie ne peut pas être vide."));
@@ -216,7 +221,7 @@ impl QueryRoot {
                     CategoryDTO {
                         id: category.id,
                         name: category.name,
-                        typeInfo: None, // Pas de types associés ici
+                        types: None, // Pas de types associés ici
                     }
                 }).collect())
             }
@@ -226,7 +231,7 @@ impl QueryRoot {
                     CategoryDTO {
                         id: category.id,
                         name: category.name,
-                        typeInfo: None, // Pas de types associés ici
+                        types: None, // Pas de types associés ici
                     }
                 }).collect())
             }
@@ -260,7 +265,7 @@ impl QueryRoot {
             CategoryDTO {
                 id: category.id,
                 name: category.name,
-                typeInfo: types.into_iter().next().map(|t| TypeDTO { 
+                types: types.into_iter().next().map(|t| TypeDTO { 
                     id: t.id,
                     name: t.name
                 }),
