@@ -1,43 +1,37 @@
 import createApolloClient from "@/lib/apolloClient";
 import {ApolloClient, gql, NormalizedCacheObject} from "@apollo/client";
 
-export class SongCategoryService {
+export class TypesService {
    client: ApolloClient<NormalizedCacheObject>;
     constructor() {
-
         this.client = createApolloClient();
-
     }
 
-     create(name:string,typeId:number){
-        this.client.mutate({
+     create(name:string){
+       return this.client.mutate({
            mutation: gql`
-             mutation CategoryMutation($name: String!, $typeId: ID!) {
-                 createCategory(name: $name, typeId: $typeId) {
+             mutation TypesMutation($name: String!) {
+                 createType(name: $name) {
                  id
                  name
                }
              }
            `,
-           variables: { name:name, typeId:typeId},
-         });
+           variables: { name:name},
+         }).then(({ data }) => data.createType );
      }
     findAll() {
         return this.client
         .query({
             query: gql`
-                query CategoryQuery {
-                    allCategories {
+                query TypesQuery {
+                    allTypes {
                         id
                         name
-                        types {
-                            id
-                            name
-                        }
                     }
                 }
             `,
         })
-        .then(({ data }) => data.allCategories );
+        .then(({ data }) => data.allTypes );
     }
 }

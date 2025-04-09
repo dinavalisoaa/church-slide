@@ -3,10 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { RevealHandle, RevealSlides } from "../../../../Reveal";
 
 
-import Song from "@/components/slide/song";
+import Song from "@/components/new-features/song";
 import dynamic from "next/dynamic";
-import ImageHolder from "@/components/slide/image-holder";
-import TransitionPage from "@/components/slide/transition-page";
+import ImageHolder from "@/components/new-features/image-holder";
+import TransitionPage from "@/components/new-features/transition-page";
 
 function Slide() {
 

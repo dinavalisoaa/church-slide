@@ -14,12 +14,7 @@ use sea_orm::ColumnTrait;
 use crate::schemas::author_ql::AuthorDTO;
 use crate::schemas::category_ql::CategoryDTO;
 use crate::schemas::verses_ql::VerseDTO;
-
-// DTO pour Author
-
-// DTO pour Song (avec relations)
-// DTO pour Verse
-
+use sea_orm::PaginatorTrait;
 #[derive(Debug, Serialize, Deserialize, SimpleObject)]
 pub struct SongDTO {
     pub id: i32,
@@ -35,6 +30,7 @@ pub struct SongQuery;
 
 #[Object]
 impl SongQuery {
+
     async fn find_song_by_id(
         &self,
         ctx: &Context<'_>,
@@ -69,7 +65,6 @@ impl SongQuery {
         }
     }
 
-    // Récupérer toutes les chansons avec leurs relations
     async fn all_songs(
         &self,
         ctx: &Context<'_>,
@@ -88,10 +83,8 @@ impl SongQuery {
             query = query.limit(limit_val as u64);
         }
 
-        // Récupérer les chansons
         let songs = query.all(&db.connection).await?;
 
-        // Charger les relations pour chaque chanson
         let mut song_dtos = Vec::new();
         for song in songs {
             let related_author = song.find_related(author::Entity).one(&db.connection).await?;
@@ -160,13 +153,46 @@ impl SongQuery {
             Ok(None)
         }
     }
+async fn song_count_by_category(
+        &self,
+        ctx: &Context<'_>,
+        category_id: i32,
+    ) -> Result<i64, Error> {
+        let db = ctx.data::<DbConnection>().unwrap();
 
-}#[derive(Default)]
+        let count = Song::find()
+            .filter(song::Column::CategoryId.eq(category_id)) // Filtre par category_id
+            .count(&db.connection)
+            .await?;
+
+       Ok(count.try_into().unwrap())
+
+    }
+
+    // Nombre de chansons pour un auteur spécifique
+    async fn song_count_by_author(
+        &self,
+        ctx: &Context<'_>,
+        author_id: i32,
+    ) -> Result<i64, Error> {
+        let db = ctx.data::<DbConnection>().unwrap();
+
+        let count = Song::find()
+            .filter(song::Column::AuthorId.eq(author_id)) // Filtre par author_id
+            .count(&db.connection)
+            .await?;
+
+       Ok(count.try_into().unwrap())
+
+    }
+}
+
+#[derive(Default)]
 pub struct SongMutation;
 
 #[Object]
 impl SongMutation {
-    // Créer une nouvelle chanson
+
     async fn create_song(
         &self,
         ctx: &Context<'_>,
@@ -225,14 +251,12 @@ impl SongMutation {
             return Err(Error::msg("La référence de la chanson ne peut pas être vide."));
         }
 
-        // Récupérer la chanson existante
         let song: song::ActiveModel = Song::find_by_id(id)
             .one(&db.connection)
             .await?
             .ok_or(DbErr::Custom("Chanson non trouvée".to_owned()))
             .map(Into::into)?;
 
-        // Créer l'ActiveModel avec les nouvelles valeurs
         let mut updated_song: song::ActiveModel = song;
         updated_song.title = Set(title.clone());
         updated_song.reference = Set(reference.clone());

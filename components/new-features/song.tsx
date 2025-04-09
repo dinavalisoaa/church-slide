@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 // import RevealMath from 'reveal.js/plugin/math/math';
 // import RevealSearch from 'reveal.js/plugin/search/search';
 
-import Verses from "@/components/slide/verse";
+import Verses from "@/components/new-features/verse";
 import * as url from "node:url";
 function Song(props: {
     andininy: string | null;

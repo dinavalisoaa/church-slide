@@ -188,13 +188,13 @@ impl CategoryMutation {
     
 }
 
-/* 
+/*
 #[Object]
 impl QueryRoot {
     async fn categories(
-        &self, 
-        ctx: &Context<'_>, 
-        filter: Option<String>, 
+        &self,
+        ctx: &Context<'_>,
+        filter: Option<String>,
         offset: Option<i32>,
         limit: Option<i32>
     ) -> Result<Vec<CategoryDTO>, sea_orm::DbErr> {
@@ -213,7 +213,7 @@ impl QueryRoot {
         match filter {
             Some(filter_str) => {
                 let results = query
-                    .filter(category::Column::Name.like(format!("%{}%", filter_str).as_str())) 
+                    .filter(category::Column::Name.like(format!("%{}%", filter_str).as_str()))
                     .all(&db.connection)
                     .await?;
 
@@ -239,10 +239,10 @@ impl QueryRoot {
     }
 }
 */
-/* 
+/*
 impl QueryRoot {
-    async fn categories(&self, 
-    ctx: &Context<'_>, 
+    async fn categories(&self,
+    ctx: &Context<'_>,
     filter: Option<String>,
     offset: Option<i32>,
     limit: Option<i32>) -> Result<Vec<CategoryDTO>, sea_orm::DbErr> {
@@ -265,15 +265,15 @@ impl QueryRoot {
             CategoryDTO {
                 id: category.id,
                 name: category.name,
-                types: types.into_iter().next().map(|t| TypeDTO { 
+                types: types.into_iter().next().map(|t| TypeDTO {
                     id: t.id,
                     name: t.name
                 }),
             }
         }).collect();
-    
+
         Ok(categories)
     }
-    
+
 }
 */

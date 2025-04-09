@@ -57,7 +57,7 @@ export default function AppSidebar() {
   const { state, isMobile } = useSidebar();
 
   return (
-    <Sidebar collapsible='icon'>
+    <Sidebar collapsible='icon' className="round">
       <SidebarHeader>
         <div className='flex gap-2 py-2 text-sidebar-accent-foreground'>
           <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>

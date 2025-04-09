@@ -16,46 +16,127 @@ import {useAddCategoryMutation} from "@/components/service/graphql/GraphQL";
 import createApolloClient from "@/lib/apolloClient";
 import {gql} from "@apollo/client";
 import {SongCategoryService} from "@/components/service/graphql/song-category/song-category-service";
+import {useSongCategories} from "@/components/hooks/useCategories";
+import {useCreateType, useTypes} from "@/components/hooks/useTypes";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/src/components/ui/select";
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
+import {TypesService} from "@/components/service/graphql/song-category/types-service";
+import { CirclePlus } from 'lucide-react';
 
+type SearchableSelectProps = {
+  setSelectedId:Dispatch<SetStateAction<string | undefined>>;
+  selectedId:string | undefined;
+  types:any;
+};
 
-export default  function NewSongCategoryDialog() {
+const SearchableSelect: FC<SearchableSelectProps> = ({ types,setSelectedId, selectedId }) => {
+  // const { data, loading, error, refetch } = useQuery(GET_OPTIONS);
+
+  // const [addOption] = useMutation(ADD_OPTION);
+  const [search, setSearch] = useState("");
+  const[filteredOptions,setFilteredOptions] = useState<any[]>();
+  // const [selectedId, setSelectedId] = useState<string | null>(null);
+    const[selectedOption,setSelectedOption] = useState<any>();
+  useEffect(() => {
+    const filteredOptions = types?.filter((option) =>
+        option?.name.toLowerCase().includes(search.toLowerCase())
+    );
+    setFilteredOptions(filteredOptions);
+  }, [types]);
+  useEffect(() => {
+    setSelectedOption(types?.find((opt) => opt.id as string == selectedId));
+  }, [selectedId]);
+  const handleAddOption = async () => {
+    try {  const typesService = new TypesService();
+      const newType = typesService.create(search)
+          .then((response) => {
+            if (response?.id) {
+              setSelectedId(response.id);
+              setSearch("");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+    } catch (error) {
+      console.error("Erreur lors de l'ajout :", error);
+    }
+  };
+  return (
+        <Select onValueChange={setSelectedId} value={selectedId as string} >
+          <SelectTrigger >
+            <SelectValue >
+              {selectedOption!=undefined ? selectedOption?.name : "Sélectionner une option"}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <div >
+              <Input
+                  placeholder="Rechercher ou ajouter..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="mb-2"
+              />
+            </div>
+            {filteredOptions?.map((option) => (
+                <SelectItem key={option.id} value={option.id.toString()}>
+                  {option.name}
+                </SelectItem>
+            ))}
+            {search && !filteredOptions?.some((opt) => opt.name.toLowerCase() === search.toLowerCase()) && (
+                <div className="p-2 flex justify-between items-center">
+                  <span onClick={handleAddOption}>Créer le type<b> <i>{search}</i></b> </span>
+                </div>
+            )}
+          </SelectContent>
+        </Select>
+  );
+}
+export default  function NewSongCategoryDialog({ onCategoryAdded })  {
   // const client = createApolloClient();
   const songCategoryService = new SongCategoryService();
-
+  const [type, setType] = useState<string>();
+  const [types, setTypes] = useState<any>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const fetch = ()=>{
+    const typesService = new TypesService();
+    typesService.findAll()
+        .then((response) => {
+          setTypes(response);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setError(error);
+          setLoading(false);
+        });
+  }
+  useEffect(() => {
+    fetch();
+  },[]);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
+    const types = new TypesService();
     const {title, description} = Object.fromEntries(formData);
-    songCategoryService.create(title.toString(), 1);
-    const type = 1;
-    // const { data } = await client.mutate({
-    //   mutation: gql`
-    //     mutation CreateCategory($name: String!, $typeId: ID!) {
-    //       createcategory(name: $name, typeId: $typeId) {
-    //         id
-    //         name
-    //         typeInfo {
-    //           id
-    //           name
-    //         }
-    //       }
-    //     }
-    //   `,
-    //   variables: { name:title, typeId:type},
-    // });
+    if (type != null) {
+      const typeId = Number.parseInt(type);
+      songCategoryService.create(title.toString(), typeId);
+      onCategoryAdded();
+    }//type? type?.toString() as unknown as number:1;
   };
-
   return (
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant='default' size='lg' className="border-2">
-            Nouveau de type de chant
+          <Button variant='outline' size='lg' className="border-2">
+            Nouveau <CirclePlus />
           </Button>
         </DialogTrigger>
         <DialogContent className='sm:max-w-[425px]'>
           <DialogHeader>
-            <DialogTitle>Ajout d'un type de chant</DialogTitle>
+            <DialogTitle>Ajout d&apos;un type de chant</DialogTitle>
             <DialogDescription>
             </DialogDescription>
           </DialogHeader>
@@ -72,19 +153,25 @@ export default  function NewSongCategoryDialog() {
                   className='col-span-4'
               />
             </div>
-            <div className='grid grid-cols-4 items-center gap-4'>
-              <Textarea
-                  id='description'
-                  name='description'
-                  placeholder='Description...'
-                  className='col-span-4'
-              />
+            <div className='grid'>
+              {/*<Select name={"type"} onValueChange={setType}>*/}
+              {/*  <SelectTrigger className='w-36'>*/}
+              {/*    <SelectValue placeholder={'Selection'} >{type?.name}</SelectValue>*/}
+              {/*  </SelectTrigger>*/}
+              {/*  <SelectContent>*/}
+              {/*    {types.map((typesItem) => (*/}
+              {/*   <>*/}
+              {/*     <SelectItem key={typesItem.id} value={typesItem}>{typesItem.name}</SelectItem></>*/}
+              {/*      ))}*/}
+              {/*  </SelectContent>*/}
+              {/*</Select>*/}
+              <SearchableSelect setSelectedId={setType} selectedId={type} types={types} />
             </div>
           </form>
           <DialogFooter>
             <DialogTrigger asChild>
               <Button type='submit' size='sm' form='todo-form'>
-                Ajouter
+               Cr&eacute;er <CirclePlus />
               </Button>
             </DialogTrigger>
           </DialogFooter>
