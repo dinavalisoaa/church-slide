@@ -44,6 +44,7 @@ const SearchableSelect: FC<SearchableSelectProps> = ({ types,setSelectedId, sele
     setFilteredOptions(filteredOptions);
   }, [types]);
   useEffect(() => {
+    console.log(selectedOption+"<<<");
     setSelectedOption(types?.find((opt) => opt.id as string == selectedId));
   }, [selectedId]);
   const handleAddOption = async () => {
@@ -66,8 +67,7 @@ const SearchableSelect: FC<SearchableSelectProps> = ({ types,setSelectedId, sele
   return (
         <Select onValueChange={setSelectedId} value={selectedId as string} >
           <SelectTrigger >
-            <SelectValue >
-              {selectedOption!=undefined ? selectedOption?.name : "Sélectionner une option"}
+            <SelectValue placeholder={selectedOption===undefined ? "Sélectionner une option": selectedOption?.name }>
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
