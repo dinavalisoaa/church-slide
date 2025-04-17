@@ -12,7 +12,7 @@ import {
 } from '@/src/components/ui/dialog';
 import { Input } from '@/src/components/ui/input';
 import { Textarea } from '@/src/components/ui/textarea';
-import {useAddCategoryMutation} from "@/components/service/graphql/GraphQL";
+import {useAddCategoryMutation} from "@/components/service/graphql/graphql";
 import createApolloClient from "@/lib/apolloClient";
 import {gql} from "@apollo/client";
 import {SongCategoryService} from "@/components/service/graphql/song-category/song-category-service";

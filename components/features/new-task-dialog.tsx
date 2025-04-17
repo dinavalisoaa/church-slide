@@ -14,7 +14,6 @@ import { Input } from '@/src/components/ui/input';
 import { Textarea } from '@/src/components/ui/textarea';
 
 import { useTaskStore } from '../utils/store';
-
 export default function NewTaskDialog() {
   const addTask = useTaskStore((state) => state.addTask);
 

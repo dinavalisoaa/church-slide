@@ -1,43 +1,16 @@
 "use client"
 
 import * as React from "react"
-import {useEffect, useState} from "react"
-import {
-    ColumnDef,
-    ColumnFiltersState,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    PaginationState,
-    SortingState,
-    useReactTable,
-    VisibilityState,
-} from "@tanstack/react-table"
-import {ArrowUpDown, ChevronDown, MoreHorizontal, Plus} from "lucide-react"
-
-import {Button} from "@/src/components/ui/button"
-import {Checkbox} from "@/src/components/ui/checkbox"
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu"
+import {useState} from "react"
 import {Input} from "@/src/components/ui/input"
-import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/src/components/ui/card";
-import {useSongCategories} from "@/components/hooks/useCategories";
-import {CategorySong} from "@/app/(main)/(with-layout)/admin/nl/page";
 import PageContainer from "@/src/components/layout/page-container"
-import Link from "next/link";
 
 import {Heading} from '@/src/components/ui/heading';
 import {Separator} from '@/src/components/ui/separator';
 import NewSongCategoryDialog from "@/components/slide/common/new-song-category-dialog";
-import {SongCategoryService} from "@/components/service/graphql/song-category/song-category-service";
+import {SongDTO, SongService} from "@/components/service/graphql/song/song-service";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/src/components/ui/card";
+import { useRouter } from "next/navigation"
 
 export type Payment = {
     id: string
@@ -49,15 +22,16 @@ export type Payment = {
 const pageSizeOptions = [10, 20, 30, 40, 50];
 export default function Page() {
 
-    const [categories, setCategories] = useState<CategorySong[]>([]);
+    const [songs, setSongs] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
-    const fetchCategories = () => {
-        const songCategoryService = new SongCategoryService();
+    const fetchSongs = () => {
+        const songService = new SongService();
         setLoading(true);
-        songCategoryService.findAll()
+        songService.findAll()
             .then((response) => {
-                setCategories(response);
+                console.log(response);
+                setSongs(response);
                 setLoading(false);
             })
             .catch((error) => {
@@ -66,22 +40,37 @@ export default function Page() {
             });
     };
     React.useEffect(() => {
-        fetchCategories();
+        fetchSongs();
+        console.log(songs);
     }, []);
-    const categories_new = React.useMemo(() =>
-            categories?.map((cat: any) => ({
-                id: cat.id,
-                name: cat.name,
-                typeId: cat.types?.id || "Unknown",
-                typeName: cat.types?.name || "Unknown",
+    const router = useRouter();
+    const songs_new:SongDTO[] = React.useMemo(() =>
+            songs?.map((song: SongDTO) => ({
+                id: song.id,
+                title: song.title,
+                reference: song.reference,
+                author:
+                    {
+                        id: song?.author.id,
+                        name: song?.author.name
+                    },
+                category:
+                    {
+                        id: song?.category.id,
+                        name: song?.category.name,
+                        typesId:null
+                    },
+                    verses :[]
             })) || [],
-        [categories]);
-    const[ keyWord,setKeyWord]=useState("");
-    const totalItems = categories_new.length;
-    const filtered = categories_new.filter((cat) => cat.name.includes(keyWord));
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(1);
-
+        [songs]);
+    const [keyWord, setKeyWord] = useState("");
+    // const totalItems = songs_new.length;
+    // const filtered = songs_new.filter((cat) => cat.name.includes(keyWord));
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const [pageSize, setPageSize] = useState(1);
+const pageDetail = (id:number) => {
+    router.push(`song/${id}`);
+}
     return (
         <PageContainer scrollable={false}>
             <div className='flex flex-1 flex-col space-y-4'>
@@ -103,17 +92,17 @@ export default function Page() {
                             }
                             className="max-w-sm"
                         />
-                        <NewSongCategoryDialog onCategoryAdded={fetchCategories} />
+                        <NewSongCategoryDialog onCategoryAdded={fetchSongs}/>
                     </div>
                     <br/>
                     <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
-
-                        {filtered.map((value,index) => {
+                        {songs_new.map((value,index) => {
                             return (
-                                   <Card key={index}>
+                                   <Card key={index} >
                                        <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                                            <CardTitle className='text-sm font-medium'>
-                                               <div className='text-2xl font-bold'>{value.name}</div>
+                                               <div className='text-2xl font-bold'>{value.title}</div>
+                                               <div className='text-2xl font-bold'>{value.reference}</div>
                                            </CardTitle>
                                        </CardHeader>
                                        <CardContent>
@@ -125,10 +114,10 @@ export default function Page() {
                                                </div>
                                                <div>
                                                    <p className='text-xs text-muted-foreground'>
-                                                       {(value.typeName)}
+                                                       {(value.category.name)}
                                                    </p>
                                                </div>
-                                               <div>
+                                               <div onClick={()=>pageDetail(value.id)}>
                                                    <svg
                                                        xmlns='http://www.w3.org/2000/svg'
                                                        fill='none'
