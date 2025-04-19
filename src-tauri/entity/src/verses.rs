@@ -10,13 +10,13 @@ pub struct Model {
     pub id: i32,
     pub lyrics: String,
     pub reference: String,
-    pub song_id  : i32
+    pub song_reference  : String
    }
 
 
    #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
    pub enum Relation {
-       #[sea_orm(belongs_to = "super::song::Entity", from = "Column::SongId", to = "super::song::Column::Id")]
+       #[sea_orm(belongs_to = "super::song::Entity", from = "Column::SongReference", to = "super::song::Column::Reference")]
        Song
    }
 

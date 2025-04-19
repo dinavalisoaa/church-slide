@@ -122,7 +122,7 @@ impl SongQuery {
             let related_author = song.find_related(author::Entity).one(&db.connection).await?;
             let related_category = song.find_related(category::Entity).one(&db.connection).await?;
             let related_verses = Verses::find()
-                .filter(verses::Column::SongId.eq(song.id))
+               .filter(verses::Column::SongReference.eq(song.reference.clone()))
                 .all(&db.connection)
                 .await?;
 

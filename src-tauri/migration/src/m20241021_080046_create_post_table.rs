@@ -5,6 +5,8 @@ pub struct Migration;
 
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
+
+
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Créer la table 'Post'
         manager

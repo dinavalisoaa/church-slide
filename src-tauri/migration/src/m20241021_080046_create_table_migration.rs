@@ -58,7 +58,7 @@ impl MigrationTrait for Migration {
                     .if_not_exists()
                     .col(pk_auto(Song::Id))
                     .col(string(Song::Title))
-                    .col(string(Song::Reference))
+                     .col(string(Song::Reference).unique_key())
                     .col(integer(Song::CategoryId))
                     .foreign_key(
                         ForeignKeyCreateStatement::new()
@@ -81,7 +81,14 @@ impl MigrationTrait for Migration {
                     )
                     .to_owned(),
             )    .await;
-
+manager
+            .get_connection()
+            .execute_unprepared(
+                r#"
+                INSERT INTO types (name) VALUES ('REUNI');
+                "#
+            )
+            .await;
             // Create Verse table
             manager
             .create_table(
@@ -91,14 +98,14 @@ impl MigrationTrait for Migration {
                     .col(pk_auto(Verses::Id))
                     .col(string(Verses::Reference))
                     .col(string(Verses::Lyrics))
-                    .col(integer(Verses::SongId))
+                    .col(string(Verses::SongReference))
                     .foreign_key(
                         ForeignKeyCreateStatement::new()
-                            .name("verses_song_id_fk_id")
+                            .name("verses_song_ref_fk_id")
                             .from_tbl(Verses::Table)
-                            .from_col(Verses::SongId)
+                            .from_col(Verses::SongReference)
                             .to_tbl(Song::Table)
-                            .to_col(Song::Id)
+                            .to_col(Song::Reference)
                             .on_delete(ForeignKeyAction::Cascade),
                     )
                     .to_owned(),
@@ -110,6 +117,16 @@ impl MigrationTrait for Migration {
         // Supprimer la table 'Post'
         // todo!();
 
+             manager
+                        .drop_table(Table::drop().table(Verses::Table).to_owned())
+                        .await;
+ manager
+            .drop_table(Table::drop().table(Types::Table).to_owned())
+            .await;
+
+                         manager
+                                    .drop_table(Table::drop().table(Author::Table).to_owned())
+                                    .await;
         manager
             .drop_table(Table::drop().table(Category::Table).to_owned())
             .await;
@@ -158,7 +175,7 @@ enum Song {
 enum Verses {
     Table,
     Id,
-    SongId,
+    SongReference,
     Lyrics,
     Reference
 }
